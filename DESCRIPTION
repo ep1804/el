@@ -1,0 +1,13 @@
+Package: easyr
+Type: Package
+Title: Data analytics made easy
+Version: 0.1.0
+Author: c(person("Soonmok", "Kwon", email="ep1804@gmail.com", role=c("aut", "cre")))
+Maintainer: Soonmok Kwon <ep1804@gmail.com>
+Description: Data analytics made easy
+License: What license is it under?
+LazyData: TRUE
+Imports:
+  corrplot (>= 0.73),
+  diptest (>= 0.75-7),
+  futile.logger (>= 1.4.1)
