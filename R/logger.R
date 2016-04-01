@@ -87,7 +87,7 @@ log.error <- function(msg, ..., capture=FALSE){
 #' @examples log.set(DEBUG)
 #' @examples log.set(toConsole=F)
 #' @examples log.set(file=NULL)
-log.set <- function(threshold=INFO, toConsole=TRUE, file='2015.log'){
+log.set <- function(threshold=INFO, toConsole=TRUE, file='1.log'){
   flog.threshold(threshold)
   if(toConsole){
     if(is.null(file))
