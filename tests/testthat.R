@@ -1,4 +1,4 @@
 library(testthat)
-library(ear)
+library(el)
 
-test_check("ear")
+test_check("el")

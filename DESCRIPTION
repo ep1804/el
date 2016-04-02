@@ -1,10 +1,10 @@
-Package: ear
+Package: el
 Type: Package
-Title: Elementary Analytics with R
+Title: Elementary anaLytics
 Version: 0.1.0
 Author: c(person("Soonmok", "Kwon", email="ep1804@gmail.com", role=c("aut", "cre")))
 Maintainer: Soonmok Kwon <ep1804@gmail.com>
-Description: Elementary Analytics with R
+Description: Elementary analytics tools for personal usage
 License: GPL
 LazyData: TRUE
 Depends:

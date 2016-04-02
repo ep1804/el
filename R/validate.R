@@ -3,7 +3,7 @@
 #' @param data  vector, matrix, or data.frame 
 #'
 #' @return logical
-ear.isValid <- function(data, type = c('vector', 'matrix', 'data.frame')) {
+el.isValid <- function(data, type = c('vector', 'matrix', 'data.frame')) {
   switch(type,
     vector = {
       if (!is.vector(data))
