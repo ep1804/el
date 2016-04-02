@@ -9,9 +9,9 @@
 #'
 #' @examples el.acf(vector, plot=T)
 #' 
-el.acf <- function(data, alpha = 0.05, plot = FALSE) {
+el.acf <- function(data, alpha = 0.05, plot = TRUE) {
   
-  if (!el.isValid(data, 'vector')) return()
+  if (!el.isValid(data, 'single')) return()
   
   a <- acf(data, plot = plot, na.action = na.pass)
   
