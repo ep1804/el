@@ -1,4 +1,4 @@
-context("Correlation matrix")
+context("K-Means clustering")
 
 test_that("Check kmeans performance result of iris[,1]", {
   d <- as.vector(iris[,1])
