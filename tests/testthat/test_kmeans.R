@@ -19,7 +19,7 @@ test_that("Check kmeans performance result of iris[,1:4]", {
 test_that("Check kmeans result of iris[,1:4]", {
   d <- iris[,1:4]
   cl <- el.kmeans(d, 3)
-  score <- el.kmeansScore(d, cl$model)
+  score <- el.kmeansScore(d, cl$fit)
   
   expect_equal(cl$score, score)
 })

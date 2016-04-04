@@ -38,7 +38,7 @@ el.kmeansPerf <- function(data, plot=T){
 #' @param data  vector, matrix, or dta.frame
 #' @param plot  plot or not
 #'
-#' @return list(model=list(k, centers), score)
+#' @return list(fit=list(k, centers), score)
 #' @export
 #'
 #' @examples
@@ -66,7 +66,7 @@ el.kmeans <- function(data, k, plot=T){
     # TODO pca3d plot
   }
   
-  list(model=list(k=k, centers=cl$centers), score=as.vector(cl$cluster))
+  list(fit=list(k=k, centers=cl$centers), score=as.vector(cl$cluster))
 }
 
 
@@ -75,14 +75,14 @@ el.kmeans <- function(data, k, plot=T){
 #' @param data  vector, matrix, or dta.frame
 #'
 #' @param data  
-#' @param model k-means clustering model
+#' @param fit  k-means clustering model
 #'
 #' @return vector k-means cluster membership numbers
 #' @export
 #'
-#' @examples el.kmeansScore(iris[,1:4], model)
+#' @examples el.kmeansScore(iris[,1:4], fit)
 #' 
-el.kmeansScore <- function(data, model){
+el.kmeansScore <- function(data, fit){
   
   if(is.vector(data)){
     if(!el.isValid(data, 'single')) return()
@@ -96,8 +96,8 @@ el.kmeansScore <- function(data, model){
   res <- apply(data, 1, function(x){
     if(any(is.na(x))) return(NA)
     
-    which.min(sapply(1:nrow(model$centers), function(i){
-      dist(rbind(x, model$centers[i,]))
+    which.min(sapply(1:nrow(fit$centers), function(i){
+      dist(rbind(x, fit$centers[i,]))
     }))
   })
   

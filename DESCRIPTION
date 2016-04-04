@@ -12,5 +12,7 @@ Depends:
 Imports:
   corrplot (>= 0.73),
   diptest (>= 0.75-7),
+  matrixcalc (>= 1.0-3),
+  MASS (>= 7.3-45)
 Suggests: 
   testthat (>= 0.11.0)
