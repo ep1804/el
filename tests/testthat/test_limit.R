@@ -9,6 +9,6 @@ test_that("Check limit functions", {
   bucl <- el.limit(data)
   blcl <- el.limit(data, upper = F)
   
-  expect_true(abs(bucl - zucl) < 10)
-  expect_true(abs(blcl - zlcl) < 10)
+  expect_true(abs(bucl - zucl) < 20)
+  expect_true(abs(blcl - zlcl) < 20)
 })

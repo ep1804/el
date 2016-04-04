@@ -28,7 +28,7 @@ el.t2 <- function(data, cluster = NULL, plot = TRUE, alpha = 0.05) {
   }
   
   if (is.null(cluster)) {
-    cluster <- list(k = 1, centers = as.matrix(kmeans(d, 1)$centers, nrow = 1))
+    cluster <- list(k = 1, center = as.matrix(kmeans(d, 1)$center, nrow = 1))
     clusterScore <- rep(1, nrow(d))
   } else{
     clusterScore <- el.kmeansScore(d, cluster)
@@ -93,7 +93,7 @@ el.t2Score <- function(data, fit, plot = TRUE) {
       if(is.na(cl) | ! is.matrix(fit$icov[[cl]]))
         NA
       else{
-        v <- as.vector(d[i,]) - as.vector(fit$cluster$centers[cl,])
+        v <- as.vector(d[i,]) - as.vector(fit$cluster$center[cl,])
         v %*% fit$icov[[cl]] %*% v
       }
     }

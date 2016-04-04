@@ -1,3 +1,5 @@
+requireNamespace('rgl')
+
 #' Measure performance of Kmeans culstering with varying k's
 #'
 #' @param data  vector, matrix, or data.frame.
@@ -8,7 +10,7 @@
 #'
 #' @examples el.kmeansPerf(iris[,1:4])
 #' 
-el.kmeansPerf <- function(data, plot=T){
+el.kmeansPerf <- function(data, plot = TRUE) {
   
   if(is.vector(data)){
     if(!el.isValid(data, 'single')) return()
@@ -35,16 +37,18 @@ el.kmeansPerf <- function(data, plot=T){
 
 #' K-Means clustering model & score
 #'
-#' @param data  vector, matrix, or data.frame.
-#' @param plot  logical. Plot or not
-#' @param k     numeric. Target number of clusters
+#' @param data     vector, matrix, or data.frame.
+#' @param k        numeric. Target number of clusters
+#' @param plot     logical. Plot or not
+#' @param plot3d   logical. Plot or not
+#' @param targetSS numeric. Target intra-cluster distance sq. sum.
 #'
-#' @return list(fit=list(k, centers), score)
+#' @return list(fit=list(k, center), score)
 #' @export
 #'
 #' @examples el.kmeans(iris[,-5], 3)
 #' 
-el.kmeans <- function(data, k, plot=T){
+el.kmeans <- function(data, k, plot=TRUE, plot3d=TRUE, targetSS=NULL){
   
   if(is.vector(data)){
     if(!el.isValid(data, 'single')) return()
@@ -60,14 +64,32 @@ el.kmeans <- function(data, k, plot=T){
     return()
   }
   
-  cl <- kmeans(d, centers=k)
-  
-  if(plot){
-    # TODO pca2d plot
-    # TODO pca3d plot
+  if(is.null(targetSS)){
+    cl <- kmeans(d, centers=k)
+  }else{
+    ss <- Inf
+    while(ss >= targetSS * 1.05){
+      cl <- kmeans(d, centers=k)
+      ss <- cl$tot.withinss
+    }
   }
   
-  list(fit=list(k=k, centers=cl$centers), score=as.vector(cl$cluster))
+  if(plot | plot3d){
+    points <- el.pca(d, plot = F, plot3d = F)$score
+    
+    if(plot){
+      oldPar <- par(no.readonly = T)
+      plot(points[, 1:2], col = cl$cluster)
+      par(oldPar)
+    }
+    
+    if(plot3d){
+      rgl::plot3d(points[,1:3], col = cl$cluster)
+    }
+  }
+  
+  list(fit = list(k = k, center = cl$centers),
+       score = as.vector(cl$cluster))
 }
 
 
@@ -95,8 +117,8 @@ el.kmeansScore <- function(data, fit){
   res <- apply(data, 1, function(x){
     if(any(is.na(x))) return(NA)
     
-    which.min(sapply(1:nrow(fit$centers), function(i){
-      dist(rbind(x, fit$centers[i,]))
+    which.min(sapply(1:nrow(fit$center), function(i){
+      dist(rbind(x, fit$center[i,]))
     }))
   })
   

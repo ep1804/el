@@ -2,7 +2,7 @@ context("K-Means clustering")
 
 test_that("Check kmeans performance result of iris[,1]", {
   d <- as.vector(iris[,1])
-  kf <- el.kmeansPerf(iris[,1:4], plot=F)
+  kf <- el.kmeansPerf(iris[,1:4])
   
   expect_true(is.numeric(kf))
   expect_equal(length(kf), 20)
@@ -10,7 +10,7 @@ test_that("Check kmeans performance result of iris[,1]", {
 
 test_that("Check kmeans performance result of iris[,1:4]", {
   d <- iris[,1:4]
-  kf <- el.kmeansPerf(iris[,1:4], plot=F)
+  kf <- el.kmeansPerf(iris[,1:4])
   
   expect_true(is.numeric(kf))
   expect_equal(length(kf), 20)

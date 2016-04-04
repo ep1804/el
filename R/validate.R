@@ -2,6 +2,7 @@
 #'
 #' @param data  vector, matrix, or data.frame. 
 #' @param type  character. 'single' or 'multiple'
+#' @export
 #'
 #' @return logical
 #' 
