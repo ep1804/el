@@ -1,5 +1,6 @@
 requireNamespace('devtools')
 
 devtools::build()
-devtools::check(document = F)
+devtools::check()
+devtools::document()
 devtools::install()

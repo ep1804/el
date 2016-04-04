@@ -1,11 +1,11 @@
 #' UCL or LCL by bootstrap method
 #'
-#' @param data       vector   
-#' @param alpha      numeric  critical level
-#' @param upper      logical  TRUE for ucl, FALSE for lcl
-#' @param bootstraps numeric  number of testing in bootstrap method
+#' @param data       vector.   
+#' @param alpha      numeric. Critical level
+#' @param upper      logical. TRUE for ucl, FALSE for lcl
+#' @param bootstraps numeric. Number of testing in bootstrap method
 #'
-#' @return numeric  UCL or LCL
+#' @return numeric. UCL or LCL
 #' @export
 #'
 #' @examples el.limit(beaver1$temp)
@@ -28,11 +28,11 @@ el.limit <- function(data, alpha=0.05, upper=TRUE, bootstraps=200){
 
 #' UCL or LCL assuming distribution of given data is normal
 #'
-#' @param data       vector   
-#' @param alpha      numeric  critical level
-#' @param upper      logical  TRUE for ucl, FALSE for lcl
+#' @param data       vector.
+#' @param alpha      numeric. Critical level
+#' @param upper      logical. TRUE for ucl, FALSE for lcl
 #'
-#' @return numeric UCL or LCL
+#' @return numeric. UCL or LCL
 #' @export
 #'
 #' @examples el.zlimit(beaver1$temp)

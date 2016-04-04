@@ -1,13 +1,13 @@
 #' Auto Correlation Function
 #'
-#' @param data   vector
-#' @param alpha  target critical index (both tails)
-#' @param plot   plot or not
+#' @param data   vector.
+#' @param alpha  numeric. Target critical index (both tails)
+#' @param plot   logical. Plot or not
 #'
 #' @return list(lag, )
 #' @export
 #'
-#' @examples el.acf(vector, plot=T)
+#' @examples el.acf(beaver1$temp, plot=TRUE)
 #' 
 el.acf <- function(data, alpha = 0.05, plot = TRUE) {
   

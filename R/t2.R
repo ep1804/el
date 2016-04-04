@@ -1,15 +1,15 @@
 
 #' T2 model and score
 #'
-#' @param data    vector, matrix, or data.frame
-#' @param cluster list  kmeans cluster model
-#' @param plot    plot or not
-#' @param alpha   critical index
+#' @param data    vector, matrix, or data.frame.
+#' @param cluster list.  kmeans cluster model
+#' @param plot    logical. plot or not
+#' @param alpha   numeric. critical index
 #'
 #' @return list(fit=list(cluster, icov, alpha, ucl), score)
 #' @export
 #'
-#' @examples el.t2(iris[,-5], el.kmeans(data, 3)$fit)
+#' @examples el.t2(iris[,-5], el.kmeans(iris[,-5], 3)$fit)
 #' 
 el.t2 <- function(data, cluster = NULL, plot = TRUE, alpha = 0.05) {
   
@@ -23,7 +23,7 @@ el.t2 <- function(data, cluster = NULL, plot = TRUE, alpha = 0.05) {
   }
   
   if (nrow(d) < 1) {
-    log.warn("There's no non-NA data.")
+    logger.warn("There's no non-NA data.")
     return()
   }
   
@@ -37,7 +37,7 @@ el.t2 <- function(data, cluster = NULL, plot = TRUE, alpha = 0.05) {
   icov <- lapply(1:cluster$k, function(i) {
     d1 <- d[clusterScore == i, ]
     if (nrow(d1) <= ncol(d1)) {
-      log.warn("Too small cluster: %d", i)
+      logger.warn("Too small cluster: %d", i)
       NA
     } else{
       el.inv(cov(d1))
@@ -62,14 +62,14 @@ el.t2 <- function(data, cluster = NULL, plot = TRUE, alpha = 0.05) {
 
 #' T2 score given T2 model
 #'
-#' @param data    vector, matrix, or data.frame
+#' @param data    vector, matrix, or data.frame.
 #' @param fit     T2 model 
-#' @param plot    plot or not
+#' @param plot    logical. plot or not
 #'
-#' @return vector t2 scores
+#' @return vector. T2 scores
 #' @export
 #'
-#' @examples el.t2Score(iris[,-5], el.t2(...)$fit)
+#' @examples el.t2Score(iris[,-5], el.t2(iris[,-5], el.kmeans(iris[,-5], 3)$fit)$fit)
 #' 
 el.t2Score <- function(data, fit, plot = TRUE) {
   

@@ -1,9 +1,9 @@
 #' Measure performance of Kmeans culstering with varying k's
 #'
-#' @param data  vector, matrix, or dta.frame
-#' @param plot  plot or not
+#' @param data  vector, matrix, or data.frame.
+#' @param plot  logical. plot or not
 #'
-#' @return vector sum of intra-cluster squared distance
+#' @return vector. Sum of intra-cluster squared distance
 #' @export
 #'
 #' @examples el.kmeansPerf(iris[,1:4])
@@ -20,7 +20,7 @@ el.kmeansPerf <- function(data, plot=T){
   }
   
   if(nrow(d) < 20){
-    log.error('Too small non-NA data')
+    logger.error('Too small non-NA data')
     return()
   }
   
@@ -35,13 +35,14 @@ el.kmeansPerf <- function(data, plot=T){
 
 #' K-Means clustering model & score
 #'
-#' @param data  vector, matrix, or dta.frame
-#' @param plot  plot or not
+#' @param data  vector, matrix, or data.frame.
+#' @param plot  logical. Plot or not
+#' @param k     numeric. Target number of clusters
 #'
 #' @return list(fit=list(k, centers), score)
 #' @export
 #'
-#' @examples
+#' @examples el.kmeans(iris[,-5], 3)
 #' 
 el.kmeans <- function(data, k, plot=T){
   
@@ -55,7 +56,7 @@ el.kmeans <- function(data, k, plot=T){
   }
   
   if(nrow(d) < k){
-    log.error('Too small non-NA data')
+    logger.error('Too small non-NA data')
     return()
   }
   
@@ -72,15 +73,13 @@ el.kmeans <- function(data, k, plot=T){
 
 #' K-Means cluster membership check
 #'
-#' @param data  vector, matrix, or dta.frame
+#' @param data  vector, matrix, or data.frame.
+#' @param fit   K-means clustering model
 #'
-#' @param data  
-#' @param fit  k-means clustering model
-#'
-#' @return vector k-means cluster membership numbers
+#' @return vector. K-means cluster membership numbers
 #' @export
 #'
-#' @examples el.kmeansScore(iris[,1:4], fit)
+#' @examples el.kmeansScore(iris[,1:4], el.kmeans(iris[,-5], 3)$fit)
 #' 
 el.kmeansScore <- function(data, fit){
   

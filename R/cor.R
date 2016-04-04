@@ -2,10 +2,10 @@ requireNamespace('corrplot')
 
 #' Correlation matrix
 #'
-#' @param data  matrix or data.frame
-#' @param plot  plot or not
+#' @param data  matrix or data.frame.
+#' @param plot  logical. Plot or not
 #'
-#' @return matrix  correlation mtx.
+#' @return matrix. Correlation mtx.
 #' @export
 #'
 #' @examples el.cor(iris[,1:3])
