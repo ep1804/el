@@ -9,7 +9,7 @@
 #'
 #' @examples el.mvlm(bearing)
 #' 
-el.mvlm <- function(data, alpha = 0.001, plot = TRUE) {
+el.mvlm <- function(data, alpha = 0.05, plot = TRUE) {
   if(!el.isValid(data, 'multiple')) return()
   
   d <- as.matrix(data[complete.cases(data),])
