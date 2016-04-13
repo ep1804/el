@@ -4,7 +4,7 @@
 #' @param alpha numeric. Critical level
 #' @param plot  logical. Plot or not
 #'
-#' @return list. mvlm fit and score
+#' @return list(fit, score).
 #' @export
 #'
 #' @examples el.mvlm(bearing)
@@ -53,6 +53,16 @@ el.mvlm <- function(data, alpha = 0.001, plot = TRUE) {
   )
 } 
 
+#' Compute scores given multivariate non-parametric linear regression model
+#'
+#' @param data  matrix or data.frame.
+#' @param fit   list(state, ucl. lcl).
+#' @param plot  logical. Plot or not
+#'
+#' @return list(est, resi, alert)
+#' @export
+#'
+#' @examples
 el.mvlmScore <- function(data, fit, plot = TRUE) {
   if(!el.isValid(data, 'multiple')) return()
   
