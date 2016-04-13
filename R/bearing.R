@@ -1,7 +1,7 @@
-#' Reduced version of a public bearing data from NASA site.
+#' Publicly available bearing run-to-fail data. Reduced version.
 #' 
 #' Experiments on bearings. The data set was provided by the Center for 
-#' Intelligent Maintenance Systems (IMS), University of Cincinnati.
+#' Intelligent Maintenance Systems, University of Cincinnati.
 #' First set is reduced from 20 kHz to 1 Hz frequency.
 #' 
 #' @format A data frame with 2156 rows and 9 variables:
