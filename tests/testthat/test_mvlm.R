@@ -1,12 +1,12 @@
 context("Multivariate Linear Regression")
 
 test_that("MVLM functions", {
-  data = bearing[,-1]
-  half = as.integer(nrow(data) / 2)
   
-  mdl <- el.mvlm(data[1:half,])
+  tr <- bearing[1:12000,-1]
+  ob <- bearing[-(1:12000),-1]
   
-  sc <- el.mvlmScore(data[-(1:half),], mdl$fit)
+  m <- el.mvlm(tr, alpha = 0.01)
+  s <- el.mvlmScore(ob, m$fit)
   
-  expect_true(nrow(data) == 2156) # FIXME real test needed
+  expect_true(abs(sum(s$est) + 10950.45) < 1)
 })

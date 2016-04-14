@@ -7,7 +7,13 @@
 #' @return list(fit, score).
 #' @export
 #'
-#' @examples el.mvlm(bearing)
+#' @examples
+#' tr <- bearing[1:12000, -1] 
+#' ob <- bearing[-(1:12000), -1]  
+#' m <- el.mvlm(tr, alpha = 0.01) 
+#' s <- el.mvlmScore(ob, m$fit)  
+#' s2 <- el.poissonFilter(s$alert)  
+#' el.plot.est(ob, s$est, s2$score, rows = 4)
 #' 
 el.mvlm <- function(data, alpha = 0.05, plot = TRUE) {
   if(!el.isValid(data, 'multiple')) return()
@@ -19,8 +25,8 @@ el.mvlm <- function(data, alpha = 0.05, plot = TRUE) {
     return()
   }
   
-  state = d %*% el.inv(t(d) %*% d) %*% t(d)
-  est = state %*% d
+  state = el.inv(t(d) %*% d) %*% t(d) %*% d
+  est = d %*% state
   
   resi = d - est
   ucl = apply(resi, 2, function(x) { el.limit(x, alpha=alpha/2) })
@@ -28,20 +34,7 @@ el.mvlm <- function(data, alpha = 0.05, plot = TRUE) {
   
   alert = t(apply(resi, 1, function(x){ x < lcl | x > ucl }))
   
-  if (plot) {
-    oldPar <- par(no.readonly = T)
-    par(mfrow = c(3, 1))
-    for (i in 1:ncol(d)) {
-      matplot(
-        cbind(d[, i], est[, i]),
-        type = 'l',
-        ylab = paste('V', i, sep = ''),
-        col = c(1, 3)
-      )
-      abline(v = (1:nrow(d))[alert[, i]], col = 2)
-    }
-    par(oldPar)
-  }
+  if (plot) { el.plot.est(d, est, alert) }
   
   list(
     fit = list(state = state,
@@ -56,47 +49,36 @@ el.mvlm <- function(data, alpha = 0.05, plot = TRUE) {
 #' Compute scores given multivariate non-parametric linear regression model
 #'
 #' @param data  matrix or data.frame.
-#' @param fit   list(state, ucl. lcl).
+#' @param fit   list(state, ucl. lcl). mvlm model
 #' @param plot  logical. Plot or not
 #'
 #' @return list(est, resi, alert)
 #' @export
 #'
-#' @examples
+#' @examples 
+#' tr <- bearing[1:12000, -1] 
+#' ob <- bearing[-(1:12000), -1]  
+#' m <- el.mvlm(tr, alpha = 0.01) 
+#' s <- el.mvlmScore(ob, m$fit)  
+#' s2 <- el.poissonFilter(s$alert)  
+#' el.plot.est(ob, s$est, s2$score, rows = 4)
+#' 
 el.mvlmScore <- function(data, fit, plot = TRUE) {
   if(!el.isValid(data, 'multiple')) return()
   
   d <- as.matrix(data)
-  
-  if (nrow(d) != nrow(fit$state)) {
-    logger.error("Number of rows in data is different from model")
-    return()
-  }
   
   if (ncol(d) != length(fit$ucl)) {
     logger.error("Number of columms in data is different from model")
     return()
   }
   
-  est = fit$state %*% d
+  est = d %*% fit$state
   resi = d - est
   alert = t(apply(resi, 1, function(x){ x < fit$lcl | x > fit$ucl }))
   
-  if(plot){
-    oldPar <- par(no.readonly = T)
-    par(mfrow = c(3, 1))
-    for (i in 1:ncol(d)) {
-      matplot(
-        cbind(d[, i], est[, i]),
-        type = 'l',
-        ylab = paste('V', i, sep = ''),
-        col = c(1, 3)
-      )
-      abline(v = (1:nrow(d))[alert[, i]], col = 2)
-    }
-    par(oldPar)
-  }
-  
+  if (plot) { el.plot.est(d, est, alert) }
+
   list(est = est,
        resi = resi,
        alert = alert)
