@@ -21,7 +21,7 @@ el.pca <- function(data, plot=TRUE, plot3d=TRUE){
     return()
   }
   
-  pca <- princomp(d)
+  pca <- princomp(d, cor = TRUE) # using cor. mtx (scale effect)
   
   va <- pca$sdev * pca$sdev
   vaCusum <- cumsum(va / sum(va))
