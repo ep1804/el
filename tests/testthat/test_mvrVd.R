@@ -1,6 +1,6 @@
-context("Multivariate Regression with Vector Similarity")
+context("Multivariate Regression with Vector Distance")
 
-test_that("MVR VS functions", {
+test_that("MVR VD functions", {
   
   tr <- bearing[1:12000, -1]
   ob <- bearing[-(1:12000), -1]
