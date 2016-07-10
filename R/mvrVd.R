@@ -134,6 +134,6 @@ el.mvrVd.distanceMeasure <- function(data){
       theta <- abs(at1 - at2)
       
       1 - theta * pi / 180 / 90
-    }
+    })
   }
 }
