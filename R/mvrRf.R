@@ -28,8 +28,9 @@ el.mvrRf <- function(data, alpha = 0.05, ntree = 100, plot = TRUE) {
     return()
   }
   
-  forests <- lapply(1:ncol(d), function(i){
-    randomForest::randomForest(d[,i] ~ ., data = d, ntree = ntree)
+  forests <- lapply(1:ncol(d), function(i) {
+    randomForest::randomForest(as.formula(paste(colnames(d)[i], '~ .')), 
+                               data = d, ntree = ntree)
   })
   
   est <- as.data.frame(sapply(1:ncol(d), function(i){

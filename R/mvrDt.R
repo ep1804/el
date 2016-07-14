@@ -28,7 +28,7 @@ el.mvrDt <- function(data, alpha = 0.05, plot = TRUE) {
   }
   
   dtrees <- lapply(1:ncol(d), function(i){
-    rpart::rpart(d[,i] ~ ., data = d)
+    rpart::rpart(as.formula(paste(colnames(d)[i], '~ .')), data = d)
   })
   
   est <- as.data.frame(sapply(1:ncol(d), function(i){
