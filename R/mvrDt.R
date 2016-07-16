@@ -10,12 +10,8 @@ requireNamespace('rpart')
 #' @export
 #'
 #' @examples
-#' tr <- bearing[1:12000, -1]
-#' ob <- bearing[-(1:12000), -1]
-#' m <- el.mvrDt(tr, alpha = 0.01)
-#' s <- el.mvrDtScore(ob, m$fit)
-#' s2 <- el.poissonFilter(s$alert)
-#' el.plot.est(ob, s$est, s2$score, rows = 4)
+#' model <- el.mvrDt(tr, alpha = 0.05)
+#' score <- el.mvrDtScore(ob, model$fit)
 #' 
 el.mvrDt <- function(data, alpha = 0.05, plot = TRUE) {
   if(!el.isValid(data, 'multiple')) return()
@@ -27,12 +23,12 @@ el.mvrDt <- function(data, alpha = 0.05, plot = TRUE) {
     return()
   }
   
-  dtrees <- lapply(1:ncol(d), function(i){
+  trees <- lapply(1:ncol(d), function(i){
     rpart::rpart(as.formula(paste(colnames(d)[i], '~ .')), data = d)
   })
   
   est <- as.data.frame(sapply(1:ncol(d), function(i){
-    predict(dtrees[[i]], d)
+    predict(trees[[i]], d)
   }))
   
   resi <- d - est
@@ -45,63 +41,47 @@ el.mvrDt <- function(data, alpha = 0.05, plot = TRUE) {
     el.limit(x, alpha = alpha / 2, upper = F)
   })
   
-  alert = t(apply(resi, 1, function(x) {
-    x < lcl | x > ucl
-  }))
+  if (plot) { el.plot.resi(resi, ucl, lcl) }
   
-  if (plot) { el.plot.est(d, est, alert) }
-  
-  list(
-    fit = list(dtrees = dtrees,
+  list( 
+    fit = list(trees = trees,
                alpha = alpha,
                ucl = ucl,
                lcl = lcl),
-    score = list(est = est,
-                 resi = resi,
-                 alert = alert)
+    score = resi
   )
 } 
 
 #' Compute scores given multivariate regression model with decision tree
 #'
 #' @param data  matrix or data.frame.
-#' @param fit   list(dtrees, alpha, ucl. lcl). mvrLm model
+#' @param fit   list(trees, alpha, ucl. lcl). mvrLm model
 #' @param plot  logical. Plot or not
 #'
 #' @return list(est, resi, alert)
 #' @export
 #'
 #' @examples 
-#' tr <- bearing[1:12000, -1]
-#' ob <- bearing[-(1:12000), -1]
-#' m <- el.mvrDt(tr, alpha = 0.01)
-#' s <- el.mvrDtScore(ob, m$fit)
-#' s2 <- el.poissonFilter(s$alert)
-#' el.plot.est(ob, s$est, s2$score, rows = 4)
+#' model <- el.mvrDt(tr, alpha = 0.05)
+#' score <- el.mvrDtScore(ob, model$fit)
 #' 
 el.mvrDtScore <- function(data, fit, plot = TRUE) {
   if(!el.isValid(data, 'multiple')) return()
   
   d <- as.data.frame(data)
   
-  if (ncol(d) != length(fit$ucl)) {
+  if (ncol(d) != length(fit$trees)) {
     logger.error("Number of columms in data is different from model")
     return()
   }
   
   est <- as.data.frame(sapply(1:ncol(d), function(i){
-    predict(fit$dtrees[[i]], d)
+    predict(fit$trees[[i]], d)
   }))
   
   resi = d - est
   
-  alert = t(apply(resi, 1, function(x) {
-    x < fit$lcl | x > fit$ucl
-  }))
+  if (plot) { el.plot.resi(resi, fit$ucl, fit$lcl) }
   
-  if (plot) { el.plot.est(d, est, alert) }
-  
-  list(est = est,
-       resi = resi,
-       alert = alert)
+  resi
 }

@@ -8,8 +8,5 @@ test_that("MVR DT functions", {
   model <- el.mvrDt(tr, alpha = 0.05)
   score <- el.mvrDtScore(ob, model$fit)
   
-  score2 <- el.poissonFilter(score$alert)
-  el.plot.est(ob, score$est, score2$score, rows = 4)
-  
-  expect_true(TRUE) # TODO
+  expect_true(abs(sum(score) - 2.0) < 0.5)
 })
