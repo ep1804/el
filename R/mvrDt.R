@@ -14,6 +14,7 @@ requireNamespace('rpart')
 #' score <- el.mvrDtScore(ob, model$fit)
 #' 
 el.mvrDt <- function(data, alpha = 0.05, plot = TRUE) {
+  
   if(!el.isValid(data, 'multiple')) return()
   
   d <- as.data.frame(data[complete.cases(data),])

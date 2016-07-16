@@ -8,7 +8,6 @@
 #' @param time  POSIXct. if given, x-axis is changed to time  TODO
 #' @param mrow  numeric. max rows. applied to graphic parameter mfrow
 #'
-#' @return
 #' @export
 #'
 #' @examples
@@ -39,7 +38,7 @@ el.plot.resi <- function(resi, ucl = NULL, lcl = NULL, time = NULL, mrow = 4) {
   oldPar <- par(no.readonly = T)
   par(mfrow = c(mrow, 1))
   
-  for (i in 1:ncol(ob)) {
+  for (i in 1:ncol(resi)) {
     re <- resi[,i]
     uc <- ucl[,i]
     lc <- lcl[,i]

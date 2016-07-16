@@ -4,21 +4,18 @@ requireNamespace('randomForest')
 #'
 #' @param data  matrix or data.frame.   
 #' @param alpha numeric. Critical level
-#' @param plot  logical. Plot or not
 #' @param ntree numeric. Number of treed for random forest model
+#' @param plot  logical. Plot or not
 #'
 #' @return list(fit, score).
 #' @export
 #'
 #' @examples
-#' tr <- bearing[1:12000, -1]
-#' ob <- bearing[-(1:12000), -1]
-#' m <- el.mvrRf(tr, alpha = 0.01)
-#' s <- el.mvrRfScore(ob, m$fit)
-#' s2 <- el.poissonFilter(s$alert)
-#' el.plot.est(ob, s$est, s2$score, rows = 4)
+#' model <- el.mvrRf(tr, alpha = 0.01) 
+#' score <- el.mvrRfScore(ob, model$fit)
 #' 
 el.mvrRf <- function(data, alpha = 0.01, ntree = 100, plot = TRUE) {
+  
   if(!el.isValid(data, 'multiple')) return()
   
   d <- as.data.frame(data[complete.cases(data),])
@@ -29,8 +26,11 @@ el.mvrRf <- function(data, alpha = 0.01, ntree = 100, plot = TRUE) {
   }
   
   forests <- lapply(1:ncol(d), function(i) {
-    randomForest::randomForest(as.formula(paste(colnames(d)[i], '~ .')), 
+    randomForest::randomForest(as.formula(paste(colnames(d)[i], '~ .')),
                                data = d, ntree = ntree)
+    
+    # c.f. following code is incorrect
+    # randomForest::randomForest(d[,i] ~ .,  data = d, ntree = ntree)
   })
   
   est <- as.data.frame(sapply(1:ncol(d), function(i){
@@ -47,20 +47,14 @@ el.mvrRf <- function(data, alpha = 0.01, ntree = 100, plot = TRUE) {
     el.limit(x, alpha = alpha / 2, upper = F)
   })
   
-  alert = t(apply(resi, 1, function(x) {
-    x < lcl | x > ucl
-  }))
-  
-  if (plot) { el.plot.est(d, est, alert) }
+  if (plot) { el.plot.resi(resi, ucl, lcl) }
   
   list(
     fit = list(forests = forests,
                alpha = alpha,
                ucl = ucl,
                lcl = lcl),
-    score = list(est = est,
-                 resi = resi,
-                 alert = alert)
+    score = resi
   )
 } 
 
@@ -74,12 +68,8 @@ el.mvrRf <- function(data, alpha = 0.01, ntree = 100, plot = TRUE) {
 #' @export
 #'
 #' @examples 
-#' tr <- bearing[1:12000, -1]
-#' ob <- bearing[-(1:12000), -1]
-#' m <- el.mvrRf(tr, alpha = 0.01)
-#' s <- el.mvrRfScore(ob, m$fit)
-#' s2 <- el.poissonFilter(s$alert)
-#' el.plot.est(ob, s$est, s2$score, rows = 4)
+#' model <- el.mvrRf(tr, alpha = 0.01) 
+#' score <- el.mvrRfScore(ob, model$fit)
 #' 
 el.mvrRfScore <- function(data, fit, plot = TRUE) {
   if(!el.isValid(data, 'multiple')) return()
@@ -97,13 +87,8 @@ el.mvrRfScore <- function(data, fit, plot = TRUE) {
   
   resi = d - est
   
-  alert = t(apply(resi, 1, function(x) {
-    x < fit$lcl | x > fit$ucl
-  }))
+
+  if (plot) { el.plot.resi(resi, fit$ucl, fit$lcl) }
   
-  if (plot) { el.plot.est(d, est, alert) }
-  
-  list(est = est,
-       resi = resi,
-       alert = alert)
+  resi
 }
