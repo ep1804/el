@@ -2,17 +2,14 @@ context("Multivariate Regression with Random Forest Model")
 
 test_that("MVR RF functions", {
   
-  bear <- bearing[seq(1, 20000, 10),]
+  tr <- bearing[1:(nrow(bearing)/2), -1]
+  ob <- bearing[, -1]
   
-  tr <- bear[1:1000, -1]
-  ob <- bear[1001:2000, -1]
+  model <- el.mvrRf(tr, alpha = 0.01)
+  score <- el.mvrRfScore(ob, model$fit)
   
-  m <- el.mvrRf(tr, alpha = 0.05)
-  s <- el.mvrRfScore(ob, m$fit)
+  score2 <- el.poissonFilter(score$alert)
+  el.plot.est(ob, score$est, score2$score, rows = 4)
   
-  s2 <- el.poissonFilter(s$alert)
-  el.plot.est(ob, s$est, s2$score, rows = 4)
-  
-  # expect_true(abs(sum(s$est) + 10954.97) < 10)
-  expect_true(TRUE)
+  expect_true(TRUE) # TODO
 })

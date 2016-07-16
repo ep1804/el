@@ -18,7 +18,7 @@ requireNamespace('randomForest')
 #' s2 <- el.poissonFilter(s$alert)
 #' el.plot.est(ob, s$est, s2$score, rows = 4)
 #' 
-el.mvrRf <- function(data, alpha = 0.05, ntree = 100, plot = TRUE) {
+el.mvrRf <- function(data, alpha = 0.01, ntree = 100, plot = TRUE) {
   if(!el.isValid(data, 'multiple')) return()
   
   d <- as.data.frame(data[complete.cases(data),])

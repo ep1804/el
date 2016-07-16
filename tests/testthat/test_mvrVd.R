@@ -2,8 +2,8 @@ context("Multivariate Regression with Vector Distance")
 
 test_that("MVR VD functions", {
   
-  tr <- bearing[1:12000, -1]
-  ob <- bearing[-(1:12000), -1]
+  tr <- bearing[1:(nrow(bearing)/2), -1]
+  ob <- bearing[, -1]
   
   #m <- el.mvrVd(tr, alpha = 0.01)
   #s <- el.mvrVdScore(ob, m$fit)
