@@ -59,7 +59,7 @@ el.mvrDt <- function(data, alpha = 0.05, plot = TRUE) {
 #' @param fit   list(trees, alpha, ucl. lcl). mvrLm model
 #' @param plot  logical. Plot or not
 #'
-#' @return list(est, resi, alert)
+#' @return residual to estimation
 #' @export
 #'
 #' @examples 
@@ -67,6 +67,7 @@ el.mvrDt <- function(data, alpha = 0.05, plot = TRUE) {
 #' score <- el.mvrDtScore(ob, model$fit)
 #' 
 el.mvrDtScore <- function(data, fit, plot = TRUE) {
+  
   if(!el.isValid(data, 'multiple')) return()
   
   d <- as.data.frame(data)

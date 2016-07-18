@@ -8,25 +8,28 @@
 #' @export
 #'
 #' @examples
-#' tr <- bearing[1:12000, -1] 
-#' ob <- bearing[-(1:12000), -1]  
-#' m <- el.mvrLm(tr, alpha = 0.01) 
-#' s <- el.mvrLmScore(ob, m$fit)  
-#' s2 <- el.poissonFilter(s$alert)  
-#' el.plot.est(ob, s$est, s2$score, rows = 4)
+#' model <- el.mvrLm(tr, alpha = 0.05)
+#' score <- el.mvrLmScore(ob, model$fit)
 #' 
 el.mvrLm <- function(data, alpha = 0.05, plot = TRUE) {
+  
   if(!el.isValid(data, 'multiple')) return()
   
-  d <- as.matrix(data[complete.cases(data),])
+  d <- as.data.frame(data[complete.cases(data),])
   
-  if (nrow(d) < ncol(d) * 4) {
+  if (nrow(d) < ncol(d)) {
     logger.error("Non-NA data is too small")
     return()
   }
   
-  mtx = el.inv(t(d) %*% d) %*% t(d) %*% d
-  est = d %*% mtx
+  lms <- lapply(1:ncol(d), function(i){
+    glm(as.formula(paste(colnames(d)[i], '~ .')), data = d)
+  })
+  
+  est <- as.data.frame(sapply(1:ncol(d), function(i){
+    predict(lms[[i]], d)
+  }))
+  
   resi = d - est
   
   ucl = apply(resi, 2, function(x) {
@@ -37,20 +40,14 @@ el.mvrLm <- function(data, alpha = 0.05, plot = TRUE) {
     el.limit(x, alpha = alpha / 2, upper = F)
   })
   
-  alert = t(apply(resi, 1, function(x) {
-    x < lcl | x > ucl
-  }))
+  if (plot) { el.plot.resi(resi, ucl, lcl) }
   
-  if (plot) { el.plot.est(d, est, alert) }
-  
-  list(
-    fit = list(mtx = mtx,
+  list( 
+    fit = list(lms = lms,
                alpha = alpha,
                ucl = ucl,
                lcl = lcl),
-    score = list(est = est,
-                 resi = resi,
-                 alert = alert)
+    score = resi
   )
 } 
 
@@ -60,34 +57,31 @@ el.mvrLm <- function(data, alpha = 0.05, plot = TRUE) {
 #' @param fit   list(mtx, alpha, ucl. lcl). mvrLm model
 #' @param plot  logical. Plot or not
 #'
-#' @return list(est, resi, alert)
+#' @return residual to estimation
 #' @export
 #'
 #' @examples 
-#' tr <- bearing[1:12000, -1]
-#' ob <- bearing[-(1:12000), -1]
-#' m <- el.mvrLm(tr, alpha = 0.01)
-#' s <- el.mvrLmScore(ob, m$fit)
-#' s2 <- el.poissonFilter(s$alert)
-#' el.plot.est(ob, s$est, s2$score, rows = 4)
+#' model <- el.mvrLm(tr, alpha = 0.05)
+#' score <- el.mvrLmScore(ob, model$fit)
 #' 
 el.mvrLmScore <- function(data, fit, plot = TRUE) {
+  
   if(!el.isValid(data, 'multiple')) return()
   
-  d <- as.matrix(data)
+  d <- as.data.frame(data)
   
-  if (ncol(d) != length(fit$ucl)) {
+  if (ncol(d) != length(fit$lms)) {
     logger.error("Number of columms in data is different from model")
     return()
   }
   
-  est = d %*% fit$mtx
-  resi = d - est
-  alert = t(apply(resi, 1, function(x){ x < fit$lcl | x > fit$ucl }))
+  est <- as.data.frame(sapply(1:ncol(d), function(i){
+    predict(fit$lms[[i]], d)
+  }))
   
-  if (plot) { el.plot.est(d, est, alert) }
-
-  list(est = est,
-       resi = resi,
-       alert = alert)
+  resi = d - est
+  
+  if (plot) { el.plot.resi(resi, fit$ucl, fit$lcl) }
+  
+  resi
 }

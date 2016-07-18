@@ -64,7 +64,7 @@ el.mvrRf <- function(data, alpha = 0.01, ntree = 100, plot = TRUE) {
 #' @param fit   list(forests, alpha, ucl. lcl). mvrLm model
 #' @param plot  logical. Plot or not
 #'
-#' @return list(est, resi, alert)
+#' @return residual to estimation
 #' @export
 #'
 #' @examples 
@@ -72,11 +72,12 @@ el.mvrRf <- function(data, alpha = 0.01, ntree = 100, plot = TRUE) {
 #' score <- el.mvrRfScore(ob, model$fit)
 #' 
 el.mvrRfScore <- function(data, fit, plot = TRUE) {
+  
   if(!el.isValid(data, 'multiple')) return()
   
   d <- as.data.frame(data)
   
-  if (ncol(d) != length(fit$ucl)) {
+  if (ncol(d) != length(fit$forests)) {
     logger.error("Number of columms in data is different from model")
     return()
   }
@@ -86,7 +87,6 @@ el.mvrRfScore <- function(data, fit, plot = TRUE) {
   }))
   
   resi = d - est
-  
 
   if (plot) { el.plot.resi(resi, fit$ucl, fit$lcl) }
   
