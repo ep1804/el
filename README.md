@@ -1,11 +1,24 @@
 ## Elementary Analytics with R
 
- - R-based data analytics made simple
- - Personalized wrapper for some popular packages
+Wrapper for some popular packages and data mining methods
+ 
+## Install
 
-## Build, check, install and import
+Download release version (zip) and install it to your R.
 
 ```
-  source('make.R')
-  library(ear)
+install.packages(path_to_zip_file, repos = NULL)
 ```
+
+## Import
+
+```
+library(el)
+```
+
+## Build, test
+
+```
+source('make.R')
+```
+
