@@ -1,0 +1,5 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+1.log
+make.R
+LICENSE
