@@ -11,7 +11,7 @@
 #'
 #' @examples el.t2(iris[,-5], el.kmeans(iris[,-5], 3)$fit)
 #' 
-el.t2 <- function(data, cluster = NULL, plot = TRUE, alpha = 0.05) {
+el.t2 <- function(data, cluster = NULL, alpha = 0.05, plot = TRUE) {
   
   if (is.vector(data)) {
     if (!el.isValid(data, 'single')) return()

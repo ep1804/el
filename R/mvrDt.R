@@ -56,7 +56,7 @@ el.mvrDt <- function(data, alpha = 0.05, plot = TRUE) {
 #' Compute scores given multivariate regression model with decision tree
 #'
 #' @param data  matrix or data.frame.
-#' @param fit   list(trees, alpha, ucl. lcl). mvrLm model
+#' @param fit   list(trees, alpha, ucl, lcl). mvrLm model
 #' @param plot  logical. Plot or not
 #'
 #' @return residual to estimation
