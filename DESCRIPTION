@@ -10,7 +10,8 @@ Description:
 License: GPL (>= 2)
 LazyData: TRUE
 Depends:
-    futile.logger (>= 1.4.1),
+    futile.logger (>= 1.4.1)
+Imports:
     corrplot (>= 0.73),
     diptest (>= 0.75-7),
     e1071 (>= 1.6-7),
@@ -19,7 +20,6 @@ Depends:
     randomForest (>= 4.6-12),
     rgl (>= 0.95.0441),
     rpart (>= 4.1-10)
-Imports:
 Suggests:
     testthat (>= 0.11.0),
     roxygen2 (>= 5.0.1)
