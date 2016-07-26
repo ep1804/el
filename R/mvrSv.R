@@ -1,20 +1,20 @@
-requireNamespace('randomForest')
+requireNamespace('e1071')
 
-#' Multivariate regression with random forest model
+#' Multivariate regression with SVR model
 #'
 #' @param data  matrix or data.frame.   
 #' @param alpha numeric. Critical level
-#' @param ntree numeric. Number of treed for random forest model
+#' @param tune  logical. Tune parameters or not
 #' @param plot  logical. Plot or not
 #'
 #' @return list(fit, score).
 #' @export
 #'
 #' @examples
-#' model <- el.mvrRf(tr, alpha = 0.01) 
-#' score <- el.mvrRfScore(ob, model$fit)
+#' model <- el.mvrSv(tr, alpha = 0.05)
+#' score <- el.mvrSvScore(ob, model$fit)
 #' 
-el.mvrRf <- function(data, alpha = 0.01, ntree = 100, plot = TRUE) {
+el.mvrSv <- function(data, alpha = 0.05, tune = FALSE, plot = TRUE) {
   
   if(!el.isValid(data, 'multiple')) return()
   
@@ -25,19 +25,25 @@ el.mvrRf <- function(data, alpha = 0.01, ntree = 100, plot = TRUE) {
     return()
   }
   
-  forests <- lapply(1:ncol(d), function(i) {
-    randomForest::randomForest(as.formula(paste(colnames(d)[i], '~ .')),
-                               data = d, ntree = ntree)
-    
-    # c.f. following code is incorrect
-    # randomForest::randomForest(d[,i] ~ .,  data = d, ntree = ntree)
+  svms <- lapply(1:ncol(d), function(i){
+    if(tune){
+      tuned <- e1071::tune(
+        e1071::svm,
+        as.formula(paste(colnames(d)[i], '~ .')),
+        data = d,
+        ranges = list(epsilon = seq(0.1, 1, 0.2), cost = 2 ^ seq(0, 9, 2))
+      )
+      tuned$best.model
+    }else{
+      e1071::svm(as.formula(paste(colnames(d)[i], '~ .')), data = d)
+    }
   })
   
   est <- as.data.frame(sapply(1:ncol(d), function(i){
-    predict(forests[[i]], d)
+    predict(svms[[i]], d)
   }))
   
-  resi <- d - est
+  resi = d - est
   
   ucl = apply(resi, 2, function(x) {
     el.limit(x, alpha = alpha / 2)
@@ -49,8 +55,8 @@ el.mvrRf <- function(data, alpha = 0.01, ntree = 100, plot = TRUE) {
   
   if (plot) { el.plot.resi(resi, ucl, lcl) }
   
-  list(
-    fit = list(forests = forests,
+  list( 
+    fit = list(svms = svms,
                alpha = alpha,
                ucl = ucl,
                lcl = lcl),
@@ -58,36 +64,36 @@ el.mvrRf <- function(data, alpha = 0.01, ntree = 100, plot = TRUE) {
   )
 } 
 
-#' Compute scores given multivariate regression model with random forest
+#' Compute scores given multivariate regression model (linear)
 #'
 #' @param data  matrix or data.frame.
-#' @param fit   list(forests, alpha, ucl, lcl). mvrLm model
+#' @param fit   list(svms, alpha, ucl. lcl). mvrSv model
 #' @param plot  logical. Plot or not
 #'
 #' @return residual to estimation
 #' @export
 #'
 #' @examples 
-#' model <- el.mvrRf(tr, alpha = 0.01) 
-#' score <- el.mvrRfScore(ob, model$fit)
+#' model <- el.mvrSv(tr, alpha = 0.05)
+#' score <- el.mvrSvScore(ob, model$fit)
 #' 
-el.mvrRfScore <- function(data, fit, plot = TRUE) {
+el.mvrSvScore <- function(data, fit, plot = TRUE) {
   
   if(!el.isValid(data, 'multiple')) return()
   
   d <- as.data.frame(data)
   
-  if (ncol(d) != length(fit$forests)) {
+  if (ncol(d) != length(fit$svms)) {
     logger.error("Number of columms in data is different from model")
     return()
   }
   
   est <- as.data.frame(sapply(1:ncol(d), function(i){
-    predict(fit$forests[[i]], d)
+    predict(fit$svms[[i]], d)
   }))
   
   resi = d - est
-
+  
   if (plot) { el.plot.resi(resi, fit$ucl, fit$lcl) }
   
   resi

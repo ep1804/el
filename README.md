@@ -7,7 +7,7 @@ Wrapper for some popular packages and data mining methods
 Download release version (zip) and install it to your R.
 
 ```
-install.packages(path_to_zip_file, repos = NULL)
+install.packages(path_to_zip_file, repos = NULL, dependencies=c("Depends", "Imports"))
 ```
 
 ## Import

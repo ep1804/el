@@ -54,7 +54,7 @@ el.mvrLm <- function(data, alpha = 0.05, plot = TRUE) {
 #' Compute scores given multivariate regression model (linear)
 #'
 #' @param data  matrix or data.frame.
-#' @param fit   list(mtx, alpha, ucl. lcl). mvrLm model
+#' @param fit   list(lms, alpha, ucl, lcl). mvrLm model
 #' @param plot  logical. Plot or not
 #'
 #' @return residual to estimation
