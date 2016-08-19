@@ -3,14 +3,15 @@ requireNamespace('rgl')
 #' Measure performance of Kmeans culstering with varying k's
 #'
 #' @param data  vector, matrix, or data.frame.
-#' @param plot  logical. plot or not
+#' @param rep   numeric. Number of repeated kmeans clustering
+#' @param plot  logical. Plot or not
 #'
 #' @return vector. Sum of intra-cluster squared distance
 #' @export
 #'
 #' @examples el.kmeansPerf(iris[,1:4])
 #' 
-el.kmeansPerf <- function(data, plot = TRUE) {
+el.kmeansPerf <- function(data, rep = 10, plot = TRUE) {
   
   if(is.vector(data)){
     if(!el.isValid(data, 'single')) return()
@@ -21,15 +22,19 @@ el.kmeansPerf <- function(data, plot = TRUE) {
     d <- data[complete.cases(data),]
   }
   
-  if(nrow(d) < 20){
+  if(nrow(d) < 15){
     logger.error('Too small non-NA data')
     return()
   }
   
-  ss <- sapply(1:20, function(k){kmeans(d, centers=k)$tot.withinss})
+  ss <- rep(Inf, 15)
+  for(i in 1:rep){
+    ss1 <- sapply(1:15, function(k){kmeans(d, centers=k)$tot.withinss})
+    ss <- apply(rbind(ss, ss1), 2, min)
+  }
   
   if(plot) 
-    plot(1:20, ss, xlab='k', ylab='Sq. sum of intra-cluster distances', type='l')
+    plot(1:15, ss, xlab='k', ylab='Sq. sum of intra-cluster distances', type='l')
   
   ss
 }
@@ -41,6 +46,7 @@ el.kmeansPerf <- function(data, plot = TRUE) {
 #' @param k        numeric. Target number of clusters
 #' @param plot     logical. Plot or not
 #' @param plot3d   logical. Plot or not
+#' @param rep      numeric. Number of repeated kmeans clustering
 #' @param targetSS numeric. Target intra-cluster distance sq. sum.
 #'
 #' @return list(fit=list(k, center), score)
@@ -48,7 +54,7 @@ el.kmeansPerf <- function(data, plot = TRUE) {
 #'
 #' @examples el.kmeans(iris[,-5], 3)
 #' 
-el.kmeans <- function(data, k, plot=TRUE, plot3d=TRUE, targetSS=NULL){
+el.kmeans <- function(data, k, plot=TRUE, plot3d=TRUE, rep=10, targetSS=NULL){
   
   if(is.vector(data)){
     if(!el.isValid(data, 'single')) return()
@@ -65,7 +71,12 @@ el.kmeans <- function(data, k, plot=TRUE, plot3d=TRUE, targetSS=NULL){
   }
   
   if(is.null(targetSS)){
-    cl <- kmeans(d, centers=k)
+    ss <- Inf
+    for(i in 1:rep){
+      cl1 <- kmeans(d, centers=k)
+      if(cl1$tot.withinss < ss)
+        cl <- cl1
+    }
   }else{
     ss <- Inf
     while(ss >= targetSS * 1.05){
@@ -75,6 +86,7 @@ el.kmeans <- function(data, k, plot=TRUE, plot3d=TRUE, targetSS=NULL){
   }
   
   if(plot | plot3d){
+    palette('default')
     points <- el.pca(d, plot = F, plot3d = F)$score
     
     if(plot){
