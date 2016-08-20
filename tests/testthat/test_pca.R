@@ -24,3 +24,8 @@ test_that("Check PCA unscoring", {
   
   expect_true( abs(sum(data - d2)) < 1E-3 )
 })
+
+test_that("Check plot with temporal coloring", {
+  data <- iris[,-5]
+  pca <- el.pca(data)
+})
