@@ -27,10 +27,13 @@ el.pca <- function(data, plot=TRUE, plot3d=TRUE){
   vaCusum <- cumsum(va / sum(va))
   
   if(plot){
+    palBack <- palette()
+    palette('default')
     oldPar <- par(no.readonly = T)
     plot(vaCusum, type='l', xlab='PCA components', ylab='Variance Cusum')
     biplot(pca)
     par(oldPar)
+    palette(palBack)
   }
   
   if(plot3d){
@@ -78,5 +81,8 @@ el.pcaUnscore <- function(score, fit){
   if (!el.isValid(score, 'multiple')) return()
   
   t(t(el.inv(fit$loading)) %*% t(score) * fit$scale + fit$center)
-  
+}
+
+el.pcaPlot3 <- function(score, preset=NULL, color=NULL){
+  rgl::plot3d(pca$scores, col = color)
 }
