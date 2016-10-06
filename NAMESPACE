@@ -2,6 +2,7 @@
 
 export(el.acf)
 export(el.cor)
+export(el.ft)
 export(el.inv)
 export(el.isValid)
 export(el.kmeans)
