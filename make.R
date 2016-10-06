@@ -1,3 +1,7 @@
+if(F){
+  install.packages('roxygen2', 'testthat', 'devtools')
+}
+
 requireNamespace('devtools')
 
 if(F){
