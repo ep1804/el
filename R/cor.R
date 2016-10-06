@@ -14,11 +14,11 @@ el.cor <- function(data, plot=TRUE){
   
   if(! el.isValid(data, 'multiple')) return()
   
-  co <- cor(data, use='pairwise.complete.obs')
+  co <- stats::cor(data, use='pairwise.complete.obs')
   if(plot){
-    oldPar <- par(no.readonly = T)
+    oldPar <- graphics::par(no.readonly = T)
     corrplot::corrplot(co, method='shade')
-    par(oldPar)
+    graphics::par(oldPar)
   }
   
   co

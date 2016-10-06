@@ -1,6 +1,8 @@
 context("K-Means clustering")
 
 test_that("Check kmeans performance result of iris[,1]", {
+  set.seed(1)
+  
   kf <- el.kmeansPerf(iris[,1:4])
   
   expect_true(is.numeric(kf))
@@ -8,6 +10,8 @@ test_that("Check kmeans performance result of iris[,1]", {
 })
 
 test_that("Check kmeans performance result of iris[,1:4]", {
+  set.seed(1)
+  
   kf <- el.kmeansPerf(iris[,1:4])
   
   expect_true(is.numeric(kf))
@@ -15,6 +19,8 @@ test_that("Check kmeans performance result of iris[,1:4]", {
 })
 
 test_that("Check kmeans result of iris[,1:4]", {
+  set.seed(1)
+  
   d <- iris[,1:4]
   cl <- el.kmeans(d, 3)
   score <- el.kmeansScore(d, cl$fit)

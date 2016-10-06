@@ -1,7 +1,7 @@
 Package: el
 Type: Package
 Title: Elementary anaLytics
-Version: 0.1.2
+Version: 0.1.3
 Author: c(person("Soonmok", "Kwon", email="ep1804@gmail.com", role=c("aut",
     "cre")))
 Maintainer: Soonmok Kwon <ep1804@gmail.com>
@@ -15,11 +15,14 @@ Imports:
     corrplot (>= 0.73),
     diptest (>= 0.75-7),
     e1071 (>= 1.6-7),
+    graphics,
+    grDevices,
     MASS (>= 7.3-45),
     matrixcalc (>= 1.0-3),
     randomForest (>= 4.6-12),
     rgl (>= 0.95.0441),
-    rpart (>= 4.1-10)
+    rpart (>= 4.1-10),
+    stats
 Suggests:
     testthat (>= 0.11.0),
     roxygen2 (>= 5.0.1)

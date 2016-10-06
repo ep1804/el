@@ -15,7 +15,7 @@ el.mvrLm <- function(data, alpha = 0.05, plot = TRUE) {
   
   if(!el.isValid(data, 'multiple')) return()
   
-  d <- as.data.frame(data[complete.cases(data),])
+  d <- as.data.frame(data[stats::complete.cases(data),])
   
   if (nrow(d) < ncol(d)) {
     logger.error("Non-NA data is too small")
@@ -23,11 +23,11 @@ el.mvrLm <- function(data, alpha = 0.05, plot = TRUE) {
   }
   
   lms <- lapply(1:ncol(d), function(i){
-    glm(as.formula(paste(colnames(d)[i], '~ .')), data = d)
+    stats::glm(stats::as.formula(paste(colnames(d)[i], '~ .')), data = d)
   })
   
   est <- as.data.frame(sapply(1:ncol(d), function(i){
-    predict(lms[[i]], d)
+    stats::predict(lms[[i]], d)
   }))
   
   resi = d - est
@@ -76,7 +76,7 @@ el.mvrLmScore <- function(data, fit, plot = TRUE) {
   }
   
   est <- as.data.frame(sapply(1:ncol(d), function(i){
-    predict(fit$lms[[i]], d)
+    stats::predict(fit$lms[[i]], d)
   }))
   
   resi = d - est
