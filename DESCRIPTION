@@ -1,7 +1,7 @@
 Package: el
 Type: Package
 Title: Elementary anaLytics
-Version: 0.1.2
+Version: 0.1.3
 Author: c(person("Soonmok", "Kwon", email="ep1804@gmail.com", role=c("aut",
     "cre")))
 Maintainer: Soonmok Kwon <ep1804@gmail.com>

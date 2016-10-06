@@ -56,9 +56,10 @@ el.plot.resi <- function(resi, ucl = NULL, lcl = NULL, time = NULL, mrow = 4) {
 
 #' Plot 3D data with given color multivariate data with control limit or alert information
 #'
-#' @param data numeric matrix or data.frame. Data to be plotted
-#' @param col  integer vector. Color index
-#' @param pal  character vector. Palette
+#' @param data    numeric matrix or data.frame. Data to be plotted
+#' @param col     integer vector. Color index
+#' @param pal     character vector. Palette
+#' @param plotPal logical. Plot palette or not
 #'
 #' @export
 #' 
@@ -85,12 +86,13 @@ el.plot3 <- function(data, col=NULL, pal=NULL, plotPal=FALSE){
     pal <- grDevices::rainbow(min(nrow(data), 250))
     pal <- pal[1:as.integer(length(pal) * 0.8)] # not using reds in the end
     grDevices::palette(pal)
-    if(plotPal){
-      graphics::plot(rep(1, length(pal)), col = 1:length(pal), type = 'h', 
-           ylab = '', ylim = c(0, 1), main = 'Palette')
-    }
   } else {
     grDevices::palette(pal)
+  }
+  
+  if(plotPal){
+    graphics::plot(rep(1, length(pal)), col = 1:length(pal), type = 'h', 
+         ylab = '', ylim = c(0, 1), main = 'Palette')
   }
   
   if (is.null(col)) {
