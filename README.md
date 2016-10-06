@@ -38,4 +38,4 @@ source('make.R')
 
 ### Coding Style
 
- - I follow Google's style because I don't want to routinely type underscore(_).
+ - I try to follow Google's style because I don't want to routinely type underscore(_).
