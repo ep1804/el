@@ -2,7 +2,7 @@
 
 This library is written...
 
- - To make my routing data science tasks easy.
+ - To make my routine data science tasks easy.
  - To make a consistent interface to some R packages that have heterogeneous coding styles.
 
 ## Install
