@@ -3,7 +3,7 @@
 This library is written...
 
  - To make my routing data science tasks easy.
- - To access some popular R packages with heterogeneous coding styles in a consistent way.
+ - To make a consistent interface to some R packages that have heterogeneous coding styles.
 
 ## Install
 
