@@ -64,7 +64,7 @@ el.plot.resi <- function(resi, ucl = NULL, lcl = NULL, time = NULL, mrow = 4) {
 #' 
 #' @examples el.plot3(bearing[,-1])
 #'
-el.plot3 <- function(data, col=NULL, pal=NULL){
+el.plot3 <- function(data, col=NULL, pal=NULL, plotPal=FALSE){
   
   if(!el.isValid(data, 'multiple')) return()
   
@@ -85,8 +85,10 @@ el.plot3 <- function(data, col=NULL, pal=NULL){
     pal <- grDevices::rainbow(min(nrow(data), 250))
     pal <- pal[1:as.integer(length(pal) * 0.8)] # not using reds in the end
     grDevices::palette(pal)
-    graphics::plot(rep(1, length(pal)), col = 1:length(pal), type = 'h', 
-         ylab = '', ylim = c(0, 1), main = 'Palette')
+    if(plotPal){
+      graphics::plot(rep(1, length(pal)), col = 1:length(pal), type = 'h', 
+           ylab = '', ylim = c(0, 1), main = 'Palette')
+    }
   } else {
     grDevices::palette(pal)
   }

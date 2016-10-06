@@ -37,7 +37,7 @@ el.pca <- function(data, plot=TRUE, plot3d=TRUE){
   }
   
   if(plot3d){
-    rgl::plot3d(pca$scores)
+    el.plot3(pca$scores)
   }
   
   list(
@@ -81,8 +81,4 @@ el.pcaUnscore <- function(score, fit){
   if (!el.isValid(score, 'multiple')) return()
   
   t(t(el.inv(fit$loading)) %*% t(score) * fit$scale + fit$center)
-}
-
-el.pcaPlot3 <- function(score, preset=NULL, color=NULL){
-  rgl::plot3d(score, col = color)
 }
