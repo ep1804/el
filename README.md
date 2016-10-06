@@ -1,7 +1,10 @@
-## Elementary Analytics with R
+## my routinE Library
 
-Wrapper for some popular packages and data mining methods
- 
+This library is written...
+
+ - To make my routing data science tasks easy.
+ - To access some popular R packages with heterogeneous coding styles in a consistent way.
+
 ## Install
 
 Download release version (zip) and install it to your R.
@@ -31,3 +34,8 @@ library(el)
 source('make.R')
 ```
 
+## Note
+
+### Coding Style
+
+ - I follow Google's style because I don't want to routinely type underscore(_).
