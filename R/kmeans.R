@@ -19,7 +19,7 @@ el.kmeansPerf <- function(data, rep = 10, plot = TRUE) {
     d <- as.matrix(d)
   }else{
     if(!el.isValid(data, 'multiple')) return()
-    d <- data[complete.cases(data),]
+    d <- data[stats::complete.cases(data),]
   }
   
   if(nrow(d) < 15){
@@ -29,7 +29,7 @@ el.kmeansPerf <- function(data, rep = 10, plot = TRUE) {
   
   ss <- rep(Inf, 15)
   for(i in 1:rep){
-    ss1 <- sapply(1:15, function(k){kmeans(d, centers=k)$tot.withinss})
+    ss1 <- sapply(1:15, function(k){stats::kmeans(d, centers=k)$tot.withinss})
     ss <- apply(rbind(ss, ss1), 2, min)
   }
   
@@ -62,7 +62,7 @@ el.kmeans <- function(data, k, plot=TRUE, plot3d=TRUE, rep=10, targetSS=NULL){
     d <- as.matrix(d)
   }else{
     if(!el.isValid(data, 'multiple')) return()
-    d <- data[complete.cases(data),]
+    d <- data[stats::complete.cases(data),]
   }
   
   if(nrow(d) < k){
@@ -73,26 +73,26 @@ el.kmeans <- function(data, k, plot=TRUE, plot3d=TRUE, rep=10, targetSS=NULL){
   if(is.null(targetSS)){
     ss <- Inf
     for(i in 1:rep){
-      cl1 <- kmeans(d, centers=k)
+      cl1 <- stats::kmeans(d, centers=k)
       if(cl1$tot.withinss < ss)
         cl <- cl1
     }
   }else{
     ss <- Inf
     while(ss >= targetSS * 1.05){
-      cl <- kmeans(d, centers=k)
+      cl <- stats::kmeans(d, centers=k)
       ss <- cl$tot.withinss
     }
   }
   
   if(plot | plot3d){
-    palette('default')
+    grDevices::palette('default')
     points <- el.pca(d, plot = F, plot3d = F)$score
     
     if(plot){
-      oldPar <- par(no.readonly = T)
+      oldPar <- graphics::par(no.readonly = T)
       plot(points[, 1:2], col = cl$cluster)
-      par(oldPar)
+      graphics::par(oldPar)
     }
     
     if(plot3d){
@@ -123,14 +123,14 @@ el.kmeansScore <- function(data, fit){
     d <- as.matrix(d)
   }else{
     if(!el.isValid(data, 'multiple')) return()
-    d <- data[complete.cases(data),]
+    d <- data[stats::complete.cases(data),]
   }
   
   res <- apply(data, 1, function(x){
     if(any(is.na(x))) return(NA)
     
     which.min(sapply(1:nrow(fit$center), function(i){
-      dist(rbind(x, fit$center[i,]))
+      stats::dist(rbind(x, fit$center[i,]))
     }))
   })
   

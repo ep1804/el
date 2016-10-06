@@ -35,8 +35,8 @@ el.plot.resi <- function(resi, ucl = NULL, lcl = NULL, time = NULL, mrow = 4) {
   if(mrow > ncol(resi))
     mrow <- ncol(resi)
   
-  oldPar <- par(no.readonly = T)
-  par(mfrow = c(mrow, 1))
+  oldPar <- graphics::par(no.readonly = T)
+  graphics::par(mfrow = c(mrow, 1))
   
   for (i in 1:ncol(resi)) {
     re <- resi[,i]
@@ -44,14 +44,14 @@ el.plot.resi <- function(resi, ucl = NULL, lcl = NULL, time = NULL, mrow = 4) {
     lc <- lcl[,i]
     al <- which(re > uc | re < lc)
     
-    plot(re, type='n', ylim=range(re, uc, lc), ylab=colnames(resi)[i])
-    abline(v = al, col = 'orange')
-    lines(uc, type='l', col='green3')
-    lines(lc, type='l', col='green3')
-    lines(re, type='l')
+    graphics::plot(re, type='n', ylim=range(re, uc, lc), ylab=colnames(resi)[i])
+    graphics::abline(v = al, col = 'orange')
+    graphics::lines(uc, type='l', col='green3')
+    graphics::lines(lc, type='l', col='green3')
+    graphics::lines(re, type='l')
   }
   
-  par(oldPar)
+  graphics::par(oldPar)
 }
 
 #' Plot 3D data with given color multivariate data with control limit or alert information
@@ -78,17 +78,17 @@ el.plot3 <- function(data, col=NULL, pal=NULL){
     data <- data[, 1:3]
   }
   
-  palBefore <- palette()
+  palBefore <- grDevices::palette()
   
   if (is.null(pal)) {
     logger.info("Color index not given. Using rainbow upto purple.")
-    pal <- rainbow(min(nrow(data), 250))
+    pal <- grDevices::rainbow(min(nrow(data), 250))
     pal <- pal[1:as.integer(length(pal) * 0.8)] # not using reds in the end
-    palette(pal)
-    plot(rep(1, length(pal)), col = 1:length(pal), type = 'h', 
+    grDevices::palette(pal)
+    graphics::plot(rep(1, length(pal)), col = 1:length(pal), type = 'h', 
          ylab = '', ylim = c(0, 1), main = 'Palette')
   } else {
-    palette(pal)
+    grDevices::palette(pal)
   }
   
   if (is.null(col)) {
@@ -106,5 +106,5 @@ el.plot3 <- function(data, col=NULL, pal=NULL){
   
   rgl::plot3d(data, col = col)
   
-  palette(palBefore) # reset palette
+  grDevices::palette(palBefore) # reset palette
 }

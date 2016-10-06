@@ -18,7 +18,7 @@ el.mvrSv <- function(data, alpha = 0.05, tune = FALSE, plot = TRUE) {
   
   if(!el.isValid(data, 'multiple')) return()
   
-  d <- as.data.frame(data[complete.cases(data),])
+  d <- as.data.frame(data[stats::complete.cases(data),])
   
   if (nrow(d) < ncol(d)) {
     logger.error("Non-NA data is too small")
@@ -29,18 +29,18 @@ el.mvrSv <- function(data, alpha = 0.05, tune = FALSE, plot = TRUE) {
     if(tune){
       tuned <- e1071::tune(
         e1071::svm,
-        as.formula(paste(colnames(d)[i], '~ .')),
+        stats::as.formula(paste(colnames(d)[i], '~ .')),
         data = d,
         ranges = list(epsilon = seq(0.1, 1, 0.2), cost = 2 ^ seq(0, 9, 2))
       )
       tuned$best.model
     }else{
-      e1071::svm(as.formula(paste(colnames(d)[i], '~ .')), data = d)
+      e1071::svm(stats::as.formula(paste(colnames(d)[i], '~ .')), data = d)
     }
   })
   
   est <- as.data.frame(sapply(1:ncol(d), function(i){
-    predict(svms[[i]], d)
+    stats::predict(svms[[i]], d)
   }))
   
   resi = d - est
@@ -89,7 +89,7 @@ el.mvrSvScore <- function(data, fit, plot = TRUE) {
   }
   
   est <- as.data.frame(sapply(1:ncol(d), function(i){
-    predict(fit$svms[[i]], d)
+    stats::predict(fit$svms[[i]], d)
   }))
   
   resi = d - est

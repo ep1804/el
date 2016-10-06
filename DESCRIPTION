@@ -15,11 +15,14 @@ Imports:
     corrplot (>= 0.73),
     diptest (>= 0.75-7),
     e1071 (>= 1.6-7),
+    graphics,
+    grDevices,
     MASS (>= 7.3-45),
     matrixcalc (>= 1.0-3),
     randomForest (>= 4.6-12),
     rgl (>= 0.95.0441),
-    rpart (>= 4.1-10)
+    rpart (>= 4.1-10),
+    stats
 Suggests:
     testthat (>= 0.11.0),
     roxygen2 (>= 5.0.1)

@@ -19,7 +19,7 @@ el.limit <- function(data, alpha=0.05, upper=TRUE, bootstraps=200){
   
   boots <- sapply(1:bootstraps, function(x){
     samples <- sample(data, size = samSize, replace = T)
-    quantile(samples, alpha, na.rm = T)
+    stats::quantile(samples, alpha, na.rm = T)
   })
   
   mean(boots)
@@ -43,5 +43,5 @@ el.zlimit <- function(data, alpha=0.05, upper=TRUE){
   
   if (upper) alpha <- 1 - alpha
   
-  mean(data, na.rm = T) + qnorm(alpha) * sd(data, na.rm = T)
+  mean(data, na.rm = T) + stats::qnorm(alpha) * stats::sd(data, na.rm = T)
 }

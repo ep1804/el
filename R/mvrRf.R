@@ -18,7 +18,7 @@ el.mvrRf <- function(data, alpha = 0.01, ntree = 100, plot = TRUE) {
   
   if(!el.isValid(data, 'multiple')) return()
   
-  d <- as.data.frame(data[complete.cases(data),])
+  d <- as.data.frame(data[stats::complete.cases(data),])
   
   if (nrow(d) < ncol(d)) {
     logger.error("Non-NA data is too small")
@@ -26,7 +26,7 @@ el.mvrRf <- function(data, alpha = 0.01, ntree = 100, plot = TRUE) {
   }
   
   forests <- lapply(1:ncol(d), function(i) {
-    randomForest::randomForest(as.formula(paste(colnames(d)[i], '~ .')),
+    randomForest::randomForest(stats::as.formula(paste(colnames(d)[i], '~ .')),
                                data = d, ntree = ntree)
     
     # c.f. following code is incorrect
@@ -34,7 +34,7 @@ el.mvrRf <- function(data, alpha = 0.01, ntree = 100, plot = TRUE) {
   })
   
   est <- as.data.frame(sapply(1:ncol(d), function(i){
-    predict(forests[[i]], d)
+    stats::predict(forests[[i]], d)
   }))
   
   resi <- d - est
@@ -83,7 +83,7 @@ el.mvrRfScore <- function(data, fit, plot = TRUE) {
   }
   
   est <- as.data.frame(sapply(1:ncol(d), function(i){
-    predict(fit$forests[[i]], d)
+    stats::predict(fit$forests[[i]], d)
   }))
   
   resi = d - est
