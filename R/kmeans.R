@@ -41,18 +41,20 @@ el.kmeans <- function(data, k = 2:8, runs = 50, plot = TRUE) {
     if (max(k) <= 8) {
       grDevices::palette('default')
     } else {
-      grDevices::palette(rainbow(max(k) * 1.25))
+      grDevices::palette(grDevices::rainbow(max(k) * 1.25))
     }
     
-    plot(
-      x = k,
-      y = fit$crit[-1],
-      type = 'l',
-      ylab = 'Calinski-Harabasz Index',
-      xlab = '# of clusters (K)',
-      main = 'K-means Clustering Performace',
-      col = 'black'
-    )
+    if(length(k) > 1){
+      plot(
+        x = k,
+        y = fit$crit[-1],
+        type = 'l',
+        ylab = 'Calinski-Harabasz Index',
+        xlab = '# of clusters (K)',
+        main = 'K-means Clustering Performace',
+        col = 'black'
+      )
+    }
     
     points <- el.pca(d, plot = F, plot3d = F)$score
     
