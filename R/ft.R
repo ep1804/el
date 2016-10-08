@@ -5,46 +5,39 @@ requireNamespace('GeneCycle')
 #'
 #' @param x      Time series values
 #' @param m.freq Measurement frequency (in Hz)
-#' @param m.intv Standard interval of measurement (in Seconds)
+#' @param f.0    Fundamental frequency, inverse of measurement interval (in Hz)
 #' @param plot   Plot periodogram or not
 #'
 #' @return list(freq, density)
 #' @export
 #'
 #' @examples
-#' trajectory <- function(freq, time){
-#'   t <- seq(0, time, 1 / freq)
-#'   res <- 3 * sin(5 * 2 * pi * t) + rnorm(length(t)) # 5 Hz 
+#' # 5 Hz signal sampled with given frequency and duration
+#' trajectory <- function(freq, duration){
+#'   t <- seq(0, duration, 1 / freq)
+#'   res <- 3 * sin(5 * 2 * pi * t) + rnorm(length(t)) # 5 for 5 Hz 
 #'   plot(res, type = "l", xlab='Sec', ylab = 'Trajectory')
 #'   res
 #' }
 #' 
-#' # In the following examples, note that with any setting of sampling 
-#' # freqnency and duration, amplitude density is always high at 5 Hz.
+#' el.ft(trajectory(100, 1), m.freq = 100, f.0 = 1)
 #' 
-#' el.ft(trajectory(100, 1), m.freq = 100, m.intv = 1)
+#' # Time series longer than standard interval (1/f.0):
+#' # considered as multiple time series and averaged
+#' el.ft(trajectory(100, 4), m.freq = 100, f.0 = 1) 
 #' 
 #' # Higher resolution due to higher frequency of sampling
-#' el.ft(trajectory(200, 1), m.freq = 200, m.intv = 1)
+#' el.ft(trajectory(200, 1), m.freq = 200, f.0 = 1)
 #' 
-#' # Higher resolution due to longer period of sampling
-#' el.ft(trajectory(100, 2), m.freq = 100, m.intv = 2) 
-#' 
-#' # Higher resolution due to both higher frequency & longer period of sampling
-#' el.ft(trajectory(200, 2), m.freq = 200, m.intv = 2)
-#' 
-#' # Time series longer than standard interval is considered as 
-#' # multiple time series and averaged. Four series here:
-#' el.ft(trajectory(100, 4), m.freq = 100, m.intv = 1)
-#' 
-#' # Four series again. with different standard interval
-#' el.ft(trajectory(100, 8), m.freq = 100, m.intv = 2)
-#' 
-el.ft <- function(x, m.freq = 1, m.intv = length(x), plot = TRUE) {
+#' # Higher resolution due to smaller fundamental frequency 
+#' # (longer standard interfal)
+#' el.ft(trajectory(100, 2), m.freq = 100, f.0 = 0.5)
+#'
+el.ft <- function(x, m.freq = length(x), f.0 = 1, plot = TRUE) {
   
   if (!el.isValid(x, 'single')) return()
   
-  len <- as.integer(m.freq * m.intv)
+  len <- as.integer(m.freq / f.0)
   
   if (length(x) < len) {
     logger.warn('Length of x is too small')
@@ -59,7 +52,7 @@ el.ft <- function(x, m.freq = 1, m.intv = length(x), plot = TRUE) {
   p <- GeneCycle::periodogram(xm)
   harmonics <- 1:(len / 2)
   
-  freq <- p$freq[harmonics] * len / m.intv
+  freq <- p$freq[harmonics] * m.freq
   density <- rowMeans(p$spec)[harmonics] / sum(p$spec)
   
   if (plot) {
