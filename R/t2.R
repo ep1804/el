@@ -19,7 +19,7 @@ el.t2 <- function(data, cluster = NULL, alpha = 0.05, plot = TRUE) {
     d <- as.matrix(d)
   } else{
     if (!el.isValid(data, 'multiple')) return()
-    d <- data[complete.cases(data), ]
+    d <- data[stats::complete.cases(data), ]
   }
   
   if (nrow(d) < 1) {
@@ -28,7 +28,7 @@ el.t2 <- function(data, cluster = NULL, alpha = 0.05, plot = TRUE) {
   }
   
   if (is.null(cluster)) {
-    cluster <- list(k = 1, center = as.matrix(kmeans(d, 1)$center, nrow = 1))
+    cluster <- list(k = 1, center = as.matrix(stats::kmeans(d, 1)$center, nrow = 1))
     clusterScore <- rep(1, nrow(d))
   } else{
     clusterScore <- el.kmeansScore(d, cluster)
@@ -40,7 +40,7 @@ el.t2 <- function(data, cluster = NULL, alpha = 0.05, plot = TRUE) {
       logger.warn("Too small cluster: %d", i)
       NA
     } else{
-      el.inv(cov(d1))
+      el.inv(stats::cov(d1))
     }
   })
   
@@ -50,10 +50,10 @@ el.t2 <- function(data, cluster = NULL, alpha = 0.05, plot = TRUE) {
   fit <- c(fit, list(alpha = alpha, ucl = ucl))
   
   if(plot){
-    oldPar <- par(no.readonly = T)
+    oldPar <- graphics::par(no.readonly = T)
     plot(score, ylab='T2 score', type='l')
-    abline(h = fit$ucl, col='red')
-    par(oldPar)
+    graphics::abline(h = fit$ucl, col='red')
+    graphics::par(oldPar)
   }
   
   list(fit = fit, score=score)
@@ -100,10 +100,10 @@ el.t2Score <- function(data, fit, plot = TRUE) {
   })
   
   if(plot){
-    oldPar <- par(no.readonly = T)
+    oldPar <- graphics::par(no.readonly = T)
     plot(res, ylab='T2 score', type='l')
-    abline(h = fit$ucl, col='red')
-    par(oldPar)
+    graphics::abline(h = fit$ucl, col='red')
+    graphics::par(oldPar)
   }
   
   res

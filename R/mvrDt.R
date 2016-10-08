@@ -17,7 +17,7 @@ el.mvrDt <- function(data, alpha = 0.05, plot = TRUE) {
   
   if(!el.isValid(data, 'multiple')) return()
   
-  d <- as.data.frame(data[complete.cases(data),])
+  d <- as.data.frame(data[stats::complete.cases(data),])
   
   if (nrow(d) < ncol(d)) {
     logger.error("Non-NA data is too small")
@@ -25,11 +25,11 @@ el.mvrDt <- function(data, alpha = 0.05, plot = TRUE) {
   }
   
   trees <- lapply(1:ncol(d), function(i){
-    rpart::rpart(as.formula(paste(colnames(d)[i], '~ .')), data = d)
+    rpart::rpart(stats::as.formula(paste(colnames(d)[i], '~ .')), data = d)
   })
   
   est <- as.data.frame(sapply(1:ncol(d), function(i){
-    predict(trees[[i]], d)
+    stats::predict(trees[[i]], d)
   }))
   
   resi <- d - est
@@ -78,7 +78,7 @@ el.mvrDtScore <- function(data, fit, plot = TRUE) {
   }
   
   est <- as.data.frame(sapply(1:ncol(d), function(i){
-    predict(fit$trees[[i]], d)
+    stats::predict(fit$trees[[i]], d)
   }))
   
   resi = d - est

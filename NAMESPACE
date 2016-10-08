@@ -2,10 +2,10 @@
 
 export(el.acf)
 export(el.cor)
+export(el.ft)
 export(el.inv)
 export(el.isValid)
 export(el.kmeans)
-export(el.kmeansPerf)
 export(el.kmeansScore)
 export(el.limit)
 export(el.mvrDt)

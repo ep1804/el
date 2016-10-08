@@ -13,7 +13,7 @@ el.acf <- function(data, alpha = 0.05, plot = TRUE) {
   
   if (!el.isValid(data, 'single')) return()
   
-  a <- acf(data, plot = plot, na.action = na.pass)
+  a <- stats::acf(data, plot = plot, na.action = stats::na.pass)
   
   ucl <- NULL
   lcl <- NULL
@@ -21,8 +21,8 @@ el.acf <- function(data, alpha = 0.05, plot = TRUE) {
   lag <- a$lag[, 1, 1]
   N <- a$n.used
   for (k in lag) {
-    ucl <- c(ucl, (-1 + qnorm(1 - alpha / 2) * sqrt(N - k - 1)) / (N - k))
-    lcl <- c(lcl, (-1 + qnorm(alpha / 2) * sqrt(N - k - 1)) / (N - k))
+    ucl <- c(ucl, (-1 + stats::qnorm(1 - alpha / 2) * sqrt(N - k - 1)) / (N - k))
+    lcl <- c(lcl, (-1 + stats::qnorm(alpha / 2) * sqrt(N - k - 1)) / (N - k))
   }
   
   list(

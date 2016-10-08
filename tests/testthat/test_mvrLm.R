@@ -1,6 +1,7 @@
 context("Multivariate Regression with Linear Model")
 
 test_that("MVR LM functions", {
+  set.seed(1)
   
   tr <- bearing[1:(nrow(bearing)/2), -1]
   ob <- bearing[, -1]
@@ -8,5 +9,5 @@ test_that("MVR LM functions", {
   model <- el.mvrLm(tr, alpha = 0.05)
   score <- el.mvrLmScore(ob, model$fit)
   
-  expect_true(abs(sum(score) - 0.8) < 0.5)
+  expect_true(abs(sum(score) / 0.8752031 - 1) < 1E-4)
 })
