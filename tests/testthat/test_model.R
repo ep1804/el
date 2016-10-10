@@ -15,7 +15,8 @@ test_that("Check regression modeling", {
   
   expect_true(is.list(fits))
   expect_true(length(fits$LM$results$Rsquared) == 9)
-  #expect_true(abs(fits$LM$results$Rsquared[1] / 0.8759337 - 1) < 1E-4) # FIXME
   
+  # FIXME random seed not works?
+  # expect_true(abs(max(fits$LM$results$Rsquared) / 0.889758 - 1) < 1E-4) 
 })
 
