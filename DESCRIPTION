@@ -12,16 +12,19 @@ LazyData: TRUE
 Depends:
     futile.logger (>= 1.4.1)
 Imports:
+    caret (>= 6.0-71),
     corrplot (>= 0.73),
     diptest (>= 0.75-7),
     e1071 (>= 1.6-7),
     fpc (>= 2.1-10),
     GeneCycle (>= 1.1.2),
+    glmnet (>= 2.0-5),
     graphics,
     grDevices,
     MASS (>= 7.3-45),
     matrixcalc (>= 1.0-3),
     randomForest (>= 4.6-12),
+    ranger (>= 0.6.0),
     rgl (>= 0.95.0441),
     rpart (>= 4.1-10),
     stats
