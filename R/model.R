@@ -62,7 +62,6 @@ el.model <- function(y, x, plot=TRUE){
     
     if(plot){
       print(plot(fit.lm, main = 'Linear model performance'))
-      
       print(plot(fit.rf, main = 'Random forest performance'))
     }
     
