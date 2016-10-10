@@ -11,6 +11,7 @@ Download release version (zip) and install it to your R.
 
 ```
 install.packages('caret')
+install.packages('caretEnsemble')
 install.packages('corrplot')
 install.packages('diptest')
 install.packages('e1071')

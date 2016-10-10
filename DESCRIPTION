@@ -13,6 +13,7 @@ Depends:
     futile.logger (>= 1.4.1)
 Imports:
     caret (>= 6.0-71),
+    caretEnsemble (>= 2.0.0),
     corrplot (>= 0.73),
     diptest (>= 0.75-7),
     e1071 (>= 1.6-7),
@@ -21,6 +22,7 @@ Imports:
     glmnet (>= 2.0-5),
     graphics,
     grDevices,
+    lattice,
     MASS (>= 7.3-45),
     matrixcalc (>= 1.0-3),
     randomForest (>= 4.6-12),
