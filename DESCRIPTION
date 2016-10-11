@@ -10,6 +10,7 @@ Description:
 License: GPL (>= 2)
 LazyData: TRUE
 Depends:
+    R (>= 2.10.0),
     futile.logger (>= 1.4.1)
 Imports:
     caret (>= 6.0-71),

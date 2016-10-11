@@ -11,12 +11,15 @@ test_that("Check regression modeling", {
   x <- dia
   x$price <- NULL
   
-  fits <- el.model(y, x)
+  evaluate_promise({
+    fits <- el.model(y, x)
+    cat(max(fits$LM$results$Rsquared))
+  }, print = T)
   
   expect_true(is.list(fits))
   expect_true(length(fits$LM$results$Rsquared) == 9)
   
   # FIXME random seed not works?
-  # expect_true(abs(max(fits$LM$results$Rsquared) / 0.889758 - 1) < 1E-4) 
+  expect_true(abs(max(fits$LM$results$Rsquared) / 0.889758 - 1) < 1E-4) 
 })
 
