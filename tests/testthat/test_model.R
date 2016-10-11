@@ -11,9 +11,10 @@ test_that("Check regression modeling", {
   # the testing environment, and it’s often hard to figure it out.
   # 
   # I had this situation: For some reason I don't know, set.seed() 
-  # didn't work and final test failed. After some dansing, I've found 
-  # a walkaround. That is inserting following two requireNamespace() 
-  # lines.
+  # didn't work and the final test failed. Than, I occationally 
+  # found the set.seed() didn't work just after restarting R session.
+  # After some dansing, I've found a walkaround of inserting 
+  # following two requireNamespace() lines.
   # 
   requireNamespace('caret')
   requireNamespace('caretEnsemble')
