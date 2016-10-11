@@ -9,5 +9,5 @@ test_that("MVR RF functions", {
   model <- el.mvrRf(tr, alpha = 0.01)
   score <- el.mvrRfScore(ob, model$fit)
   
-  expect_true(abs(sum(score) / 2.493088 - 1) < 1E-4)
+  expect_equal(round(sum(score), 5), 2.49309)
 })
