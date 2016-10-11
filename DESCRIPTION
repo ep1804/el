@@ -1,12 +1,12 @@
 Package: el
 Type: Package
-Title: Elementary anaLytics
+Title: my routinE Library
 Version: 0.1.4
 Author: c(person("Soonmok", "Kwon", email="ep1804@gmail.com", role=c("aut",
     "cre")))
 Maintainer: Soonmok Kwon <ep1804@gmail.com>
 Description: 
-  Elementary analytics tools for personal use cases.
+  my routinE Library
 License: GPL (>= 2)
 LazyData: TRUE
 Depends:

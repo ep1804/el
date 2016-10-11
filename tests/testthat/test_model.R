@@ -1,7 +1,22 @@
 context("caret Modeling")
 
 test_that("Check regression modeling", {
-  requireNamespace('ggplot2')
+  
+  #library(el)
+  
+  # http://r-pkgs.had.co.nz/check.html says:
+  # Occasionally you may have a problem where the tests pass when run 
+  # interactively with devtools::test(), but fail when in R CMD check. 
+  # This usually indicates that you’ve made a faulty assumption about 
+  # the testing environment, and it’s often hard to figure it out.
+  # 
+  # I had this situation: For some reason I don't know, set.seed() 
+  # didn't work and final test failed. After some dansing, I've found 
+  # a workaround. That is inserting following two requireNamespace() 
+  # lines.
+  # 
+  requireNamespace('caret')
+  requireNamespace('caretEnsemble')
   
   set.seed(1)
   
@@ -11,15 +26,10 @@ test_that("Check regression modeling", {
   x <- dia
   x$price <- NULL
   
-  evaluate_promise({
-    fits <- el.model(y, x)
-    cat(max(fits$LM$results$Rsquared))
-  }, print = T)
+  fits <- el.model(y, x)
   
   expect_true(is.list(fits))
   expect_true(length(fits$LM$results$Rsquared) == 9)
-  
-  # FIXME random seed not works?
-  expect_true(abs(max(fits$LM$results$Rsquared) / 0.889758 - 1) < 1E-4) 
+  expect_true(round(max(fits$LM$results$Rsquared), 5) == 0.88976) 
 })
 
