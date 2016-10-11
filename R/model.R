@@ -9,14 +9,21 @@ requireNamespace('stats')
 #'
 #' @param y    numeric or factor vector.
 #' @param x    numeric or factor data.frame.
+#' @param rlim numeric. Row limit of x. If x is larger than this, it is sampled.
 #' @param plot logical. Plot or not
 #'
 #' @return list(LM = fit.lm, RF = fit.rf)
 #' @export
 #'
-el.model <- function(y, x, plot=TRUE){
+el.model <- function(y, x, rlim = 10000, plot=TRUE){
   
   if(!is.vector(y) | !is.data.frame(x)) return()
+  
+  if(nrow(x) > rlim){
+    wh <- sort(sample(nrow(x), rlim))
+    y <- y[wh]
+    x <- x[wh, ]
+  }
   
   if(is.factor(y)){
     

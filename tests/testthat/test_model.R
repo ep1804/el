@@ -2,8 +2,6 @@ context("caret Modeling")
 
 test_that("Check regression modeling", {
   
-  #library(el)
-  
   # http://r-pkgs.had.co.nz/check.html says:
   # Occasionally you may have a problem where the tests pass when run 
   # interactively with devtools::test(), but fail when in R CMD check. 
