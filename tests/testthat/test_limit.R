@@ -11,6 +11,6 @@ test_that("Check limit functions", {
   bucl <- el.limit(data)
   blcl <- el.limit(data, upper = F)
   
-  expect_true(abs((bucl - zucl) / 4.688886 - 1) < 1E-4)
-  expect_true(abs((blcl - zlcl) / -1.530813 - 1) < 1E-4)
+  expect_equal(round(bucl - zucl, 5), 4.68889)
+  expect_equal(round(blcl - zlcl, 5), -1.53081)
 })

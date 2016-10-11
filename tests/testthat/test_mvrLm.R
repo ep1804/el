@@ -9,5 +9,5 @@ test_that("MVR LM functions", {
   model <- el.mvrLm(tr, alpha = 0.05)
   score <- el.mvrLmScore(ob, model$fit)
   
-  expect_true(abs(sum(score) / 0.8752031 - 1) < 1E-4)
+  expect_equal(round(sum(score), 6), 0.875203)
 })

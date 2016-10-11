@@ -12,7 +12,7 @@ test_that("Check regression modeling", {
   # 
   # I had this situation: For some reason I don't know, set.seed() 
   # didn't work and final test failed. After some dansing, I've found 
-  # a workaround. That is inserting following two requireNamespace() 
+  # a walkaround. That is inserting following two requireNamespace() 
   # lines.
   # 
   requireNamespace('caret')
@@ -29,7 +29,7 @@ test_that("Check regression modeling", {
   fits <- el.model(y, x)
   
   expect_true(is.list(fits))
-  expect_true(length(fits$LM$results$Rsquared) == 9)
-  expect_true(round(max(fits$LM$results$Rsquared), 5) == 0.88976) 
+  expect_equal(length(fits$LM$results$Rsquared), 9)
+  expect_equal(round(max(fits$LM$results$Rsquared), 5), 0.88976) 
 })
 

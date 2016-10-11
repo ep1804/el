@@ -7,7 +7,7 @@ test_that("Check PCA modeling", {
   pca <- el.pca(data)
   
   expect_true(is.matrix(pca$fit$loading))
-  expect_true(abs(pca$fit$vaCusum[2] - 0.9581321) < 1E-4)
+  expect_equal(round(pca$fit$vaCusum[2], 6), 0.958132)
 })
 
 test_that("Check PCA scoring", {

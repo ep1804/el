@@ -6,7 +6,7 @@ Author: c(person("Soonmok", "Kwon", email="ep1804@gmail.com", role=c("aut",
     "cre")))
 Maintainer: Soonmok Kwon <ep1804@gmail.com>
 Description: 
-  my routinE Library
+  This library is written for my routine data science tasks.
 License: GPL (>= 2)
 LazyData: TRUE
 Depends:
