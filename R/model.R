@@ -7,20 +7,20 @@ requireNamespace('stats')
 
 #' Fit a model with CV-based parameter tuning, and show in-sample performance
 #'
-#' @param y    numeric or factor vector.
-#' @param x    numeric or factor data.frame.
-#' @param rlim numeric. Row limit of x. If x is larger than this, it is sampled.
-#' @param plot logical. Plot or not
+#' @param y       numeric or factor vector.
+#' @param x       numeric or factor data.frame.
+#' @param row.lim numeric. Row limit of x. If x is larger than this, it is sampled.
+#' @param plot    logical. Plot or not
 #'
 #' @return list(LM = fit.lm, RF = fit.rf)
 #' @export
 #'
-el.model <- function(y, x, rlim = 10000, plot=TRUE){
+el.model <- function(y, x, row.lim = 10000, plot=TRUE){
   
   if(!is.vector(y) | !is.data.frame(x)) return()
   
-  if(nrow(x) > rlim){
-    wh <- sort(sample(nrow(x), rlim))
+  if(nrow(x) > row.lim){
+    wh <- sort(sample(nrow(x), row.lim))
     y <- y[wh]
     x <- x[wh, ]
   }
