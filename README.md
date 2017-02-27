@@ -25,6 +25,7 @@ install.packages('randomForest')
 install.packages('ranger')
 install.packages('rgl')
 install.packages('rpart')
+install.packages('forecast')
 install.packages(path_to_zip_file, repos = NULL, dependencies=c("Depends", "Imports"))
 ```
 
