@@ -1,5 +1,7 @@
 if(F){
-  install.packages('roxygen2', 'testthat', 'devtools')
+  install.packages('roxygen2')
+  install.packages('testthat')
+  install.packages('devtools')
 }
 
 requireNamespace('devtools')
@@ -9,6 +11,6 @@ if(F){
 }
 
 devtools::build()
-devtools::check(args='--no-examples')
+devtools::check(args = c('--no-examples'))
 devtools::document(roclets=c('rd', 'collate', 'namespace', 'vignette'))
 devtools::install()
