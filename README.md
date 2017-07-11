@@ -8,9 +8,7 @@ This library is written for
 ## Install
 
 ```r
-install.packages('devtools') # Optional if you don't have this
-library(devtools)
-install_github('ep1804/el')
+install.packages('https://github.com/ep1804/el/releases/download/v0.1.5/el_0.1.5.tar.gz', repos = NULL)
 ```
 
 ## Run
