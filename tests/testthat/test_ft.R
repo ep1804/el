@@ -25,7 +25,7 @@ test_that("Check Fourier transform", {
   
   ft <- el.ft(trajectory(100, 4), m.freq = 100, f.0 = 1) 
   
-  expect_true(abs(ft$density[5] / 0.2038839 - 1) < 1E-4)
+  expect_equal(round(ft$density[5], 6), 0.203884)
 })
 
 # ref http://www.di.fc.ul.pt/~jpn/r/fourier/fourier.html

@@ -9,5 +9,5 @@ test_that("MVR DT functions", {
   model <- el.mvrDt(tr, alpha = 0.05)
   score <- el.mvrDtScore(ob, model$fit)
   
-  expect_true(abs(sum(score) / 2.064863 - 1) < 1E-4)
+  expect_equal(round(sum(score), 5), 2.06486)
 })

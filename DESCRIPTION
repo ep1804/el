@@ -1,31 +1,36 @@
 Package: el
 Type: Package
-Title: Elementary anaLytics
-Version: 0.1.4
-Author: c(person("Soonmok", "Kwon", email="ep1804@gmail.com", role=c("aut",
-    "cre")))
+Title: my routinE Library
+Version: 0.1.5
+Author: c(person("Soonmok", "Kwon", email="ep1804@gmail.com", role=c("aut", "cre")))
 Maintainer: Soonmok Kwon <ep1804@gmail.com>
 Description: 
-  Elementary analytics tools for personal use cases.
+  This library is written for my routine data science tasks.
 License: GPL (>= 2)
 LazyData: TRUE
 Depends:
-    futile.logger (>= 1.4.1)
+    R (>= 3.3.3),
+    futile.logger (>= 1.4.3)
 Imports:
-    corrplot (>= 0.73),
+    caret (>= 6.0-71),
+    caretEnsemble (>= 2.0.0),
+    corrplot (>= 0.77),
     diptest (>= 0.75-7),
-    e1071 (>= 1.6-7),
+    e1071 (>= 1.6-8),
     fpc (>= 2.1-10),
     GeneCycle (>= 1.1.2),
+    glmnet (>= 2.0-10),
     graphics,
     grDevices,
-    MASS (>= 7.3-45),
+    lattice,
+    MASS (>= 7.3-47),
     matrixcalc (>= 1.0-3),
     randomForest (>= 4.6-12),
-    rgl (>= 0.95.0441),
-    rpart (>= 4.1-10),
+    ranger (>= 0.8.0),
+    rgl (>= 0.98.1),
+    rpart (>= 4.1-11),
     stats
 Suggests:
-    testthat (>= 0.11.0),
-    roxygen2 (>= 5.0.1)
-RoxygenNote: 5.0.1
+    testthat (>= 1.0.2),
+    roxygen2 (>= 6.0.1)
+RoxygenNote: 6.0.1

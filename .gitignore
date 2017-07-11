@@ -21,3 +21,5 @@ vignettes/*.pdf
 # Custom
 *.log
 man/*
+tests/testthat/Rplots.pdf
+.Rproj.user

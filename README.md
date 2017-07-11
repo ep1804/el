@@ -10,16 +10,22 @@ This library is written...
 Download release version (zip) and install it to your R.
 
 ```
+install.packages('caret')
+install.packages('caretEnsemble')
 install.packages('corrplot')
 install.packages('diptest')
 install.packages('e1071')
+install.packages('fpc')
 install.packages('futile.logger')
+install.packages('GeneCycle')
+install.packages('glmnet')
 install.packages('MASS')
 install.packages('matrixcalc')
-install.packages('GeneCycle')
 install.packages('randomForest')
+install.packages('ranger')
 install.packages('rgl')
 install.packages('rpart')
+install.packages('forecast')
 install.packages(path_to_zip_file, repos = NULL, dependencies=c("Depends", "Imports"))
 ```
 
