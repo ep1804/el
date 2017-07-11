@@ -1,43 +1,54 @@
-## my routinE Library
+## my routin`E L`ibrary
 
-This library is written...
+This library is written for
 
- - To make my routine data science tasks easy.
- - To make a consistent interface to some R packages that have heterogeneous coding styles.
+ - Making my routine data science tasks easier.
+ - Making a consistent interface to some R packages that have heterogeneous coding styles.
 
 ## Install
 
-Download release version (zip) and install it to your R.
-
+```r
+install.packages('https://github.com/ep1804/el/releases/download/v0.1.5/el_0.1.5.tar.gz', repos = NULL)
 ```
+
+## Run
+
+```r
+library(el)
+```
+
+## Dependencies
+
+You may need following packages:
+
+```r
 install.packages('caret')
 install.packages('caretEnsemble')
 install.packages('corrplot')
+requireNamespace('deepnet')
 install.packages('diptest')
 install.packages('e1071')
 install.packages('fpc')
+install.packages('forecast')
 install.packages('futile.logger')
 install.packages('GeneCycle')
 install.packages('glmnet')
+requireNamespace('kernlab')
+requireNamespace('lattice')
 install.packages('MASS')
 install.packages('matrixcalc')
 install.packages('randomForest')
 install.packages('ranger')
 install.packages('rgl')
 install.packages('rpart')
-install.packages('forecast')
-install.packages(path_to_zip_file, repos = NULL, dependencies=c("Depends", "Imports"))
+requireNamespace('xgboost')
 ```
 
-## Import
+## Development
 
-```
-library(el)
-```
+For manualy building and installing
 
-## Build, test
-
-```
+```r
 source('make.R')
 ```
 
