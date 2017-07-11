@@ -8,7 +8,7 @@ This library is written for
 ## Install
 
 ```
-install.packages('devtools')
+install.packages('devtools') # Optional if you don't have this
 library(devtools)
 install_github('ep1804/el')
 ```
