@@ -1,13 +1,27 @@
 ## my routinE Library
 
-This library is written...
+This library is written for
 
- - To make my routine data science tasks easy.
- - To make a consistent interface to some R packages that have heterogeneous coding styles.
+ - Making my routine data science tasks easier.
+ - Making a consistent interface to some R packages that have heterogeneous coding styles.
 
 ## Install
 
-Download release version (zip) and install it to your R.
+```
+install.packages('devtools')
+library(devtools)
+install_github('ep1804/el')
+```
+
+## Run
+
+```
+library(el)
+```
+
+## Dependencies
+
+You may need following packages:
 
 ```
 install.packages('caret')
@@ -26,16 +40,11 @@ install.packages('ranger')
 install.packages('rgl')
 install.packages('rpart')
 install.packages('forecast')
-install.packages(path_to_zip_file, repos = NULL, dependencies=c("Depends", "Imports"))
 ```
 
-## Import
+## Development
 
-```
-library(el)
-```
-
-## Build, test
+For manualy building and installing
 
 ```
 source('make.R')
