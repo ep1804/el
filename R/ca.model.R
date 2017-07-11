@@ -30,14 +30,14 @@ requireNamespace('reshape2')
 #'
 #' fits <- el.re.model(x, y)
 #'
-el.ca.model <- function(x, y, cvFolds = 7, size.lim = 10000, plot = TRUE) {
+el.ca.two.model <- function(x, y, cvFolds = 7, size.lim = 10000, plot = TRUE) {
 
-  if (!is.vector(y) | !is.numeric(y)) {
-    logger.error("y should be a numeric vector.")
+  if (!is.vector(y) & !is.factor(y)) {
+    logger.error("y should be a factor or logical.")
     return()
   }
 
-  y <- as.vector(y) # for the some vector subclasses that violates LSP
+  if(is.logical(y)){ y <- as.factor(y) }
 
   if (!is.data.frame(x)) {
     logger.error("x should be a data.frame.")
@@ -58,6 +58,8 @@ el.ca.model <- function(x, y, cvFolds = 7, size.lim = 10000, plot = TRUE) {
   trControl <- caret::trainControl(
     method = 'cv',
     number = length(folds),
+    summaryFunction = caret::twoClassSummary,
+    classProbs = TRUE,
     verboseIter = TRUE,
     savePredictions = TRUE,
     index = folds
@@ -76,6 +78,7 @@ el.ca.model <- function(x, y, cvFolds = 7, size.lim = 10000, plot = TRUE) {
     x = xn,
     y = y,
     method = 'glmnet',
+    metric = 'ROC',
     trControl = trControl
   )
 
@@ -84,6 +87,7 @@ el.ca.model <- function(x, y, cvFolds = 7, size.lim = 10000, plot = TRUE) {
     x = x,
     y = y,
     method = 'ranger',
+    metric = 'ROC',
     importance = 'impurity',
     trControl = trControl
   )
@@ -93,6 +97,18 @@ el.ca.model <- function(x, y, cvFolds = 7, size.lim = 10000, plot = TRUE) {
     x = xn,
     y = y,
     method = 'xgbTree',
+    metric = 'ROC',
+    trControl = trControl
+  )
+
+  # Recursive partitioning model with CV-based parameter tuning
+  grid <- expand.grid(cp=seq(0, 0.05, 0.01))
+  fit.rp <- caret::train(
+    x = x,
+    y = y,
+    method = 'rpart',
+    metric = 'ROC',
+    tuneGrid = grid,
     trControl = trControl
   )
 
@@ -101,6 +117,7 @@ el.ca.model <- function(x, y, cvFolds = 7, size.lim = 10000, plot = TRUE) {
     x = xn,
     y = y,
     method = 'svmRadial',
+    metric = 'ROC',
     preProcess = c("center", "scale"),
     trControl = trControl
   )
@@ -109,7 +126,8 @@ el.ca.model <- function(x, y, cvFolds = 7, size.lim = 10000, plot = TRUE) {
   fit.nn <- caret::train(
     x = xn,
     y = y,
-    method = 'brnn',
+    method = 'dnn',
+    metric = 'ROC',
     preProcess = c("center", "scale"),
     trControl = trControl
   )
@@ -140,6 +158,10 @@ el.ca.model <- function(x, y, cvFolds = 7, size.lim = 10000, plot = TRUE) {
     plotPred(y, predict(fit.gbrt), 'GBRT model prediction on train data')
     print(plot(caret::varImp(fit.gbrt), main = 'Variable importance by GBRT'))
 
+    print(plot(fit.rp, main = 'RP tuning'))
+    plotPred(y, predict(fit.rp), 'RP model prediction on train data')
+    print(plot(caret::varImp(fit.rp), main = 'Variable importance by RP'))
+
     print(plot(fit.svm, main = 'SVM tuning'))
     plotPred(y, predict(fit.svm), 'SVM model prediction on train data')
     print(plot(caret::varImp(fit.svm), main = 'Variable importance by SVM'))
@@ -150,22 +172,13 @@ el.ca.model <- function(x, y, cvFolds = 7, size.lim = 10000, plot = TRUE) {
   }
 
   # Compare models
-  fits <-
-    list(
-      LM = fit.lm,
-      RF = fit.rf,
-      GBRT = fit.gbrt,
-      SVM = fit.svm,
-      NN = fit.nn
-    )
+  fits <- list(LM = fit.lm, RF = fit.rf, GBRT = fit.gbrt, RP = fit.rp, SVM = fit.svm, NN = fit.nn)
   fits.comp <- caret::resamples(fits)
   logger.info("Model comparison summary:", summary(fits.comp), capture = T)
 
   if (plot) {
-    print(lattice::bwplot(fits.comp, metric = 'RMSE', main = 'Model comparison by RMSE'))
-    print(
-      lattice::bwplot(fits.comp, metric = 'Rsquared', main = 'Model comparison by R-squared')
-    )
+    print(lattice::bwplot(fits.comp, metric = 'ROC', main = 'Model comparison by RMSE'))
+    print(rpart.plot::prp(fit.rp$finalModel, type=4, extra=1, main = 'Decision Tree'))
   }
 
   fits

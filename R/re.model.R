@@ -1,14 +1,16 @@
 requireNamespace('caret')
 requireNamespace('caretEnsemble')
-requireNamespace('glmnet')
-requireNamespace('ranger')
-requireNamespace('xgboost')
-requireNamespace('kernlab')
 requireNamespace('deepnet')
-requireNamespace('lattice')
-requireNamespace('stats')
 requireNamespace('ggplot2')
+requireNamespace('glmnet')
+requireNamespace('kernlab')
+requireNamespace('lattice')
+requireNamespace('ranger')
 requireNamespace('reshape2')
+requireNamespace('rpart')
+requireNamespace('rpart.plot')
+requireNamespace('stats')
+requireNamespace('xgboost')
 
 #' Fit a regression model with CV-based parameter tuning, and show in-sample performance
 #'
@@ -96,6 +98,16 @@ el.re.model <- function(x, y, cvFolds = 7, size.lim = 10000, plot = TRUE) {
     trControl = trControl
   )
 
+  # Recursive partitioning model with CV-based parameter tuning
+  grid <- expand.grid(cp=seq(0, 0.05, 0.01))
+  fit.rp <- caret::train(
+    x = x,
+    y = y,
+    method = 'rpart',
+    tuneGrid = grid,
+    trControl = trControl
+  )
+
   # Fit SVM model with CV-based parameter tuning
   fit.svm <- caret::train(
     x = xn,
@@ -120,8 +132,7 @@ el.re.model <- function(x, y, cvFolds = 7, size.lim = 10000, plot = TRUE) {
       df <- data.frame(y, prediction = pred)
       df <- data.frame(index = 1:length(y), df[order(y),])
       df <- reshape2::melt(df, id.vars = 'index')
-      g <-
-        ggplot2::ggplot(data = df, aes(x = index, y = value, col = variable)) +
+      g <- ggplot2::ggplot(data = df, aes(x = index, y = value, col = variable)) +
         ggplot2::geom_jitter(alpha = 0.5) +
         ggplot2::ggtitle(main)
       print(g)
@@ -140,6 +151,10 @@ el.re.model <- function(x, y, cvFolds = 7, size.lim = 10000, plot = TRUE) {
     plotPred(y, predict(fit.gbrt), 'GBRT model prediction on train data')
     print(plot(caret::varImp(fit.gbrt), main = 'Variable importance by GBRT'))
 
+    print(plot(fit.rp, main = 'RP tuning'))
+    plotPred(y, predict(fit.rp), 'RP model prediction on train data')
+    print(plot(caret::varImp(fit.rp), main = 'Variable importance by RP'))
+
     print(plot(fit.svm, main = 'SVM tuning'))
     plotPred(y, predict(fit.svm), 'SVM model prediction on train data')
     print(plot(caret::varImp(fit.svm), main = 'Variable importance by SVM'))
@@ -150,22 +165,14 @@ el.re.model <- function(x, y, cvFolds = 7, size.lim = 10000, plot = TRUE) {
   }
 
   # Compare models
-  fits <-
-    list(
-      LM = fit.lm,
-      RF = fit.rf,
-      GBRT = fit.gbrt,
-      SVM = fit.svm,
-      NN = fit.nn
-    )
+  fits <- list(LM = fit.lm, RF = fit.rf, GBRT = fit.gbrt, RP = fit.rp, SVM = fit.svm, NN = fit.nn)
   fits.comp <- caret::resamples(fits)
   logger.info("Model comparison summary:", summary(fits.comp), capture = T)
 
   if (plot) {
     print(lattice::bwplot(fits.comp, metric = 'RMSE', main = 'Model comparison by RMSE'))
-    print(
-      lattice::bwplot(fits.comp, metric = 'Rsquared', main = 'Model comparison by R-squared')
-    )
+    print(lattice::bwplot(fits.comp, metric = 'Rsquared', main = 'Model comparison by R-squared'))
+    print(rpart.plot::prp(fit.rp$finalModel, type=4, extra=1, main = 'Decision Tree'))
   }
 
   fits

@@ -33,6 +33,7 @@ Imports:
     reshape2 (>= 1.4.2),
     rgl (>= 0.98.1),
     rpart (>= 4.1-11),
+    rpart.plot (>= 2.1.2),
     stats,
     xgboost (>= 0.6-4)
 Suggests:
