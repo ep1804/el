@@ -10,7 +10,7 @@ requireNamespace('stats')
 requireNamespace('ggplot2')
 requireNamespace('reshape2')
 
-#' Fit a regression model with CV-based parameter tuning, and show in-sample performance
+#' Fit a classification model with CV-based parameter tuning, and show in-sample performance
 #'
 #' @param x       numeric or factor data.frame.
 #' @param y       numeric or factor vector.
@@ -30,7 +30,7 @@ requireNamespace('reshape2')
 #'
 #' fits <- el.re.model(x, y)
 #'
-el.re.model <- function(x, y, cvFolds = 7, size.lim = 10000, plot = TRUE) {
+el.ca.model <- function(x, y, cvFolds = 7, size.lim = 10000, plot = TRUE) {
 
   if (!is.vector(y) | !is.numeric(y)) {
     logger.error("y should be a numeric vector.")
