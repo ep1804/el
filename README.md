@@ -7,7 +7,7 @@ This library is written for
 
 ## Install
 
-```
+```r
 install.packages('devtools') # Optional if you don't have this
 library(devtools)
 install_github('ep1804/el')
@@ -15,7 +15,7 @@ install_github('ep1804/el')
 
 ## Run
 
-```
+```r
 library(el)
 ```
 
@@ -23,7 +23,7 @@ library(el)
 
 You may need following packages:
 
-```
+```r
 install.packages('caret')
 install.packages('caretEnsemble')
 install.packages('corrplot')
@@ -46,7 +46,7 @@ install.packages('forecast')
 
 For manualy building and installing
 
-```
+```r
 source('make.R')
 ```
 
