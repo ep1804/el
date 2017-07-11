@@ -12,24 +12,29 @@ Depends:
     R (>= 3.3.3),
     futile.logger (>= 1.4.3)
 Imports:
-    caret (>= 6.0-71),
+    caret (>= 6.0-76),
     caretEnsemble (>= 2.0.0),
     corrplot (>= 0.77),
+    deepnet (>= 0.2),
     diptest (>= 0.75-7),
     e1071 (>= 1.6-8),
     fpc (>= 2.1-10),
     GeneCycle (>= 1.1.2),
+    ggplot2 (>= 2.2.1),
     glmnet (>= 2.0-10),
     graphics,
     grDevices,
-    lattice,
+    kernlab (>= 0.9-25),
+    lattice (>= 0.20-35),
     MASS (>= 7.3-47),
     matrixcalc (>= 1.0-3),
     randomForest (>= 4.6-12),
     ranger (>= 0.8.0),
+    reshape2 (>= 1.4.2),
     rgl (>= 0.98.1),
     rpart (>= 4.1-11),
-    stats
+    stats,
+    xgboost (>= 0.6-4)
 Suggests:
     testthat (>= 1.0.2),
     roxygen2 (>= 6.0.1)
