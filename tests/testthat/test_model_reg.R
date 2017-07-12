@@ -24,7 +24,7 @@ test_that("Check regression modeling", {
   fits <- el.model(x, y)
 
   expect_true(is.list(fits))
-  expect_equal(round(fits$LM$pred$pred[1], 5), 1.06673)
+  expect_equal(round(fits$LM$pred$pred[1], 5), 1.05467)
 
   set.seed(1234)
 
@@ -36,5 +36,5 @@ test_that("Check regression modeling", {
   fits <- el.model(x, y)
 
   expect_true(is.list(fits))
-  expect_equal(round(fits$LM$pred$pred[1], 3), 4629.367)
+  expect_equal(round(fits$LM$pred$pred[1], 3), 4668.391)
 })

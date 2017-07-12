@@ -24,7 +24,7 @@ test_that("Check classification modeling", {
   fits <- el.model(x, y)
 
   expect_true(is.list(fits))
-  expect_equal(round(fits$RF$results$Kappa[1], 5), 0.92333)
+  expect_equal(round(fits$RF$results$Kappa[1], 5), 0.89889)
 
   set.seed(1234)
 
@@ -36,5 +36,5 @@ test_that("Check classification modeling", {
   fits <- el.model(x, y)
 
   expect_true(is.list(fits))
-  expect_equal(round(fits$RF$results$Kappa[1], 5), 0.43116)
+  expect_equal(round(fits$RF$results$Kappa[1], 5), 0.37779)
 })

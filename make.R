@@ -14,4 +14,4 @@ devtools::build()
 
 devtools::document(roclets=c('rd', 'collate', 'namespace', 'vignette'))
 
-devtools::install()
+devtools::install(args = c('--no-lock'))
