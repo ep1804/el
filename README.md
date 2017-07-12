@@ -8,7 +8,8 @@ This library is written for
 ## Install
 
 ```r
-install.packages('https://github.com/ep1804/el/releases/download/v0.1.5/el_0.1.5.tar.gz', repos = NULL)
+install.packages('https://github.com/ep1804/el/releases/download/v0.1.5/el_0.1.5.tar.gz', 
+                 repos = NULL, dependencies=TRUE, INSTALL_opts = c('--no-lock'))
 ```
 
 ## Run
