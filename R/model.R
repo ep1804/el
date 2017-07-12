@@ -12,13 +12,15 @@ requireNamespace('rpart.plot')
 requireNamespace('stats')
 requireNamespace('xgboost')
 
-#' Fit a regression model with CV-based parameter tuning, and show in-sample performance
+#' Fit a classification or regression model with CV-based parameter tuning, and show
+#' in-sample performance
 #'
-#' @param x       numeric or factor data.frame.
-#' @param y       numeric or factor vector.
-#' @param cvFolds Cross-validation fold number
+#' @param x        numeric or factor data.frame.
+#' @param y        numeric vector or factor. If factor, classification model is built.
+#'                 If numeric vector, regression model is built.
+#' @param cvFolds  Cross-validation fold number
 #' @param size.lim numeric. If data size is larger than this, it is sampled.
-#' @param plot    logical. Plot or not
+#' @param plot     logical. Plot or not
 #'
 #' @return list of final models
 #' @export
