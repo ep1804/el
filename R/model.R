@@ -33,7 +33,7 @@ requireNamespace('xgboost')
 #' el.model.show(fits$RF)
 #' el.model.varImp(fits$RF)
 #'
-el.model <- function(x, y, cvFolds = 7, size.lim = 10000, plot = TRUE) {
+el.model <- function(x, y, cvFolds = 10, size.lim = 10000, plot = TRUE) {
 
   if (is.vector(y) & is.numeric(y)) {
     isClassification <- FALSE
@@ -63,8 +63,9 @@ el.model <- function(x, y, cvFolds = 7, size.lim = 10000, plot = TRUE) {
 
   if(isClassification){
     trControl <- caret::trainControl(
-      method = 'cv',
+      method = 'repeatedcv',
       number = length(folds),
+      repeats = 5,
       classProbs = TRUE,
       verboseIter = TRUE,
       savePredictions = TRUE,
@@ -112,24 +113,13 @@ el.model <- function(x, y, cvFolds = 7, size.lim = 10000, plot = TRUE) {
   )
 
   # Fit gradient boosted reg. tree model with CV-based parameter tuning
-  fit.gbrt <- caret::train(
-    x = xn,
-    y = y,
-    method = 'xgbTree',
-    metric = metric,
-    trControl = trControl
-  )
-
-  # Recursive partitioning model with CV-based parameter tuning
-  grid <- expand.grid(cp=seq(0, 0.05, 0.01))
-  fit.rp <- caret::train(
-    x = x,
-    y = y,
-    method = 'rpart',
-    metric = metric,
-    tuneGrid = grid,
-    trControl = trControl
-  )
+  # fit.gbrt <- caret::train(
+  #   x = xn,
+  #   y = y,
+  #   method = 'xgbTree',
+  #   metric = metric,
+  #   trControl = trControl
+  # )
 
   # Fit SVM model with CV-based parameter tuning
   fit.svm <- caret::train(
@@ -154,16 +144,12 @@ el.model <- function(x, y, cvFolds = 7, size.lim = 10000, plot = TRUE) {
   if (plot) {
     el.model.show(fit.lm, 'LM')
     el.model.show(fit.rf, 'RF')
-    el.model.show(fit.gbrt, 'GBRT')
-    el.model.show(fit.rp, 'RP')
     el.model.show(fit.svm, 'SVM')
     el.model.show(fit.nn, 'NN')
-
-    rpart.plot::prp(fit.rp$finalModel, type=4, extra=1, main = 'Decision Tree')
   }
 
   # Compare models
-  fits <- list(LM = fit.lm, RF = fit.rf, GBRT = fit.gbrt, RP = fit.rp, SVM = fit.svm, NN = fit.nn)
+  fits <- list(LM = fit.lm, RF = fit.rf, SVM = fit.svm, NN = fit.nn)
 
   el.model.compare(fits, plot)
 
