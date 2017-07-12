@@ -21,7 +21,7 @@ test_that("Check regression modeling", {
 
   x <- iris[,1:4]
   y <- as.numeric(iris$Species)
-  fits <- el.re.model(x, y)
+  fits <- el.model(x, y)
 
   expect_true(is.list(fits))
   expect_equal(round(fits$LM$pred$pred[1], 5), 1.06673)
@@ -33,8 +33,8 @@ test_that("Check regression modeling", {
   x <- dia
   x$price <- NULL
   y <- dia$price
-  fits <- el.re.model(x, y)
+  fits <- el.model(x, y)
 
   expect_true(is.list(fits))
-  expect_equal(round(fits$LM$pred$pred[1], 5), 4629.36736)
+  expect_equal(round(fits$LM$pred$pred[1], 3), 4629.367)
 })

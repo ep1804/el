@@ -19,12 +19,12 @@ test_that("Check classification modeling", {
 
   set.seed(1234)
 
-  x <- iris[1:100,1:4]
-  y <- droplevels(iris$Species[1:100])
- # fits <- el.ca.model(x, y)
+  x <- iris[1:4]
+  y <- iris$Species
+  fits <- el.model(x, y)
 
- # expect_true(is.list(fits))
- # expect_equal(round(fits$LM$pred$pred[1], 5), 1.06673)
+  expect_true(is.list(fits))
+  expect_equal(round(fits$RF$results$Kappa[1], 5), 0.92333)
 
   set.seed(1234)
 
@@ -33,10 +33,8 @@ test_that("Check classification modeling", {
   x <- dia
   x$cut <- NULL
   y <- dia$cut
- # fits <- el.re.model(x, y)
+  fits <- el.model(x, y)
 
- # expect_true(is.list(fits))
- # expect_equal(round(fits$LM$pred$pred[1], 5), 4629.36736)
-
-  expect_true(T)
+  expect_true(is.list(fits))
+  expect_equal(round(fits$RF$results$Kappa[1], 5), 0.43116)
 })

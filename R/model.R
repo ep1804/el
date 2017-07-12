@@ -24,22 +24,24 @@ requireNamespace('xgboost')
 #' @export
 #'
 #' @examples
-#' dia <- ggplot2::diamonds
-#' dia <- dia[sample(1:nrow(dia), 800),]
-#' x <- dia
-#' x$price <- NULL
-#' y <- dia$price
+#' x <- iris[1:4]
+#' y <- iris$Species
+#' fits <- el.model(x, y)
+#' el.model.compare(fits)
+#' el.model.show(fits$RF)
+#' el.model.varImp(fits$RF)
 #'
-#' fits <- el.re.model(x, y)
-#'
-el.re.model <- function(x, y, cvFolds = 7, size.lim = 10000, plot = TRUE) {
+el.model <- function(x, y, cvFolds = 7, size.lim = 10000, plot = TRUE) {
 
-  if (!is.vector(y) | !is.numeric(y)) {
-    logger.error("y should be a numeric vector.")
+  if (is.vector(y) & is.numeric(y)) {
+    isClassification <- FALSE
+  } else if(is.factor(y)) {
+    isClassification <- TRUE
+    levels(y) <- sapply(levels(y), function(s){ gsub(" ", "_", s) })
+  } else {
+    logger.error("y should be a numeric vector or a factor.")
     return()
   }
-
-  y <- as.vector(y) # for the some vector subclasses that violates LSP
 
   if (!is.data.frame(x)) {
     logger.error("x should be a data.frame.")
@@ -57,13 +59,28 @@ el.re.model <- function(x, y, cvFolds = 7, size.lim = 10000, plot = TRUE) {
 
   folds <- caret::createFolds(y, k = cvFolds)
 
-  trControl <- caret::trainControl(
-    method = 'cv',
-    number = length(folds),
-    verboseIter = TRUE,
-    savePredictions = TRUE,
-    index = folds
-  )
+  if(isClassification){
+    trControl <- caret::trainControl(
+      method = 'cv',
+      number = length(folds),
+      classProbs = TRUE,
+      verboseIter = TRUE,
+      savePredictions = TRUE,
+      index = folds
+    )
+
+    metric = 'Kappa'
+  } else {
+    trControl <- caret::trainControl(
+      method = 'cv',
+      number = length(folds),
+      verboseIter = TRUE,
+      savePredictions = TRUE,
+      index = folds
+    )
+
+    metric = 'RMSE'
+  }
 
   # For linear regression, expanding factors to set of numeric varibles
   xn <- if (all(sapply(x, is.numeric))) {
@@ -78,6 +95,7 @@ el.re.model <- function(x, y, cvFolds = 7, size.lim = 10000, plot = TRUE) {
     x = xn,
     y = y,
     method = 'glmnet',
+    metric = metric,
     trControl = trControl
   )
 
@@ -86,6 +104,7 @@ el.re.model <- function(x, y, cvFolds = 7, size.lim = 10000, plot = TRUE) {
     x = x,
     y = y,
     method = 'ranger',
+    metric = metric,
     importance = 'impurity',
     trControl = trControl
   )
@@ -95,6 +114,7 @@ el.re.model <- function(x, y, cvFolds = 7, size.lim = 10000, plot = TRUE) {
     x = xn,
     y = y,
     method = 'xgbTree',
+    metric = metric,
     trControl = trControl
   )
 
@@ -104,6 +124,7 @@ el.re.model <- function(x, y, cvFolds = 7, size.lim = 10000, plot = TRUE) {
     x = x,
     y = y,
     method = 'rpart',
+    metric = metric,
     tuneGrid = grid,
     trControl = trControl
   )
@@ -113,6 +134,7 @@ el.re.model <- function(x, y, cvFolds = 7, size.lim = 10000, plot = TRUE) {
     x = xn,
     y = y,
     method = 'svmRadial',
+    metric = metric,
     preProcess = c("center", "scale"),
     trControl = trControl
   )
@@ -121,59 +143,27 @@ el.re.model <- function(x, y, cvFolds = 7, size.lim = 10000, plot = TRUE) {
   fit.nn <- caret::train(
     x = xn,
     y = y,
-    method = 'brnn',
+    method = if(isClassification) 'nnet' else 'brnn',
+    metric = metric,
     preProcess = c("center", "scale"),
     trControl = trControl
   )
 
   if (plot) {
+    el.model.show(fit.lm, 'LM')
+    el.model.show(fit.rf, 'RF')
+    el.model.show(fit.gbrt, 'GBRT')
+    el.model.show(fit.rp, 'RP')
+    el.model.show(fit.svm, 'SVM')
+    el.model.show(fit.nn, 'NN')
 
-    plotPred <- function(y, pred, main) {
-      df <- data.frame(y, prediction = pred)
-      df <- data.frame(index = 1:length(y), df[order(y),])
-      df <- reshape2::melt(df, id.vars = 'index')
-      g <- ggplot2::ggplot(data = df, aes(x = index, y = value, col = variable)) +
-        ggplot2::geom_jitter(alpha = 0.5) +
-        ggplot2::ggtitle(main)
-      print(g)
-    }
-
-    # Tuning on training parameters and predictions on training data
-    print(plot(fit.lm, main = 'Linear model tuning'))
-    plotPred(y, predict(fit.lm), 'LM prediction on train data')
-    print(plot(caret::varImp(fit.lm), main = 'Variable importance by LM'))
-
-    print(plot(fit.rf, main = 'RF tuning'))
-    plotPred(y, predict(fit.rf), 'RF model prediction on train data')
-    print(plot(caret::varImp(fit.rf), main = 'Variable importance by RF'))
-
-    print(plot(fit.gbrt, main = 'GBRT tuning'))
-    plotPred(y, predict(fit.gbrt), 'GBRT model prediction on train data')
-    print(plot(caret::varImp(fit.gbrt), main = 'Variable importance by GBRT'))
-
-    print(plot(fit.rp, main = 'RP tuning'))
-    plotPred(y, predict(fit.rp), 'RP model prediction on train data')
-    print(plot(caret::varImp(fit.rp), main = 'Variable importance by RP'))
-
-    print(plot(fit.svm, main = 'SVM tuning'))
-    plotPred(y, predict(fit.svm), 'SVM model prediction on train data')
-    print(plot(caret::varImp(fit.svm), main = 'Variable importance by SVM'))
-
-    print(plot(fit.nn, main = 'NN tuning'))
-    plotPred(y, predict(fit.nn), 'NN model prediction on train data')
-    print(plot(caret::varImp(fit.nn), main = 'Variable importance by NN'))
+    rpart.plot::prp(fit.rp$finalModel, type=4, extra=1, main = 'Decision Tree')
   }
 
   # Compare models
   fits <- list(LM = fit.lm, RF = fit.rf, GBRT = fit.gbrt, RP = fit.rp, SVM = fit.svm, NN = fit.nn)
-  fits.comp <- caret::resamples(fits)
-  logger.info("Model comparison summary:", summary(fits.comp), capture = T)
 
-  if (plot) {
-    print(lattice::bwplot(fits.comp, metric = 'RMSE', main = 'Model comparison by RMSE'))
-    print(lattice::bwplot(fits.comp, metric = 'Rsquared', main = 'Model comparison by R-squared'))
-    print(rpart.plot::prp(fit.rp$finalModel, type=4, extra=1, main = 'Decision Tree'))
-  }
+  el.model.compare(fits, plot)
 
   fits
 }
